@@ -1,4 +1,4 @@
-package lt.beltechvillage.ksc;
+package by.cyberveska.ksc;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

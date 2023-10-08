@@ -1,4 +1,4 @@
-package lt.beltechvillage.ksc;
+package by.cyberveska.ksc;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
