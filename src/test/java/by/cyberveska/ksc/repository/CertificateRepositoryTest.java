@@ -58,8 +58,8 @@ public class CertificateRepositoryTest {
 
         testCertificate = new Certificate();
         testCertificate.setExpirationDate(cert.getNotAfter());
-        testCertificate.setSubject(cert.getSubjectDN().getName());
-        testCertificate.setIssuer(cert.getIssuerDN().getName());
+        testCertificate.setSubject(cert.getSubjectX500Principal().getName());
+        testCertificate.setIssuer(cert.getIssuerX500Principal().getName());
     }
 
     @AfterEach
@@ -96,6 +96,6 @@ public class CertificateRepositoryTest {
 
         certificateRepository.deleteById(certificate.getId());
         Optional<Certificate> foundCertificate = certificateRepository.findById(certificate.getId());
-        assertThat(foundCertificate.isPresent()).isFalse();
+        assertThat(foundCertificate).isNotPresent();
     }
 }
