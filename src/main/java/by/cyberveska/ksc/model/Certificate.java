@@ -1,6 +1,6 @@
 package by.cyberveska.ksc.model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,7 +18,9 @@ public class Certificate {
     @Lob
     private byte[] certificateData;
 
-    private LocalDateTime expirationDate;
+    private Date expirationDate;
+    private String subject;
+    private String issuer;
 
     public Long getId() {
         return id;
@@ -36,12 +38,28 @@ public class Certificate {
         this.certificateData = certificateData;
     }
 
-    public LocalDateTime getExpirationDate() {
+    public Date getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(LocalDateTime expirationDate) {
+    public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getIssuer() {
+        return issuer;
+    }
+
+    public void setIssuer(String issuer) {
+        this.issuer = issuer;
     }
 
     // Getters, setters, constructors, etc.
