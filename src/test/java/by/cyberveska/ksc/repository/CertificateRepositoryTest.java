@@ -52,14 +52,26 @@ public class CertificateRepositoryTest {
     public void setUp() throws Exception {
         // Read the certificate from the provided PEM file
         Path path = Paths.get(Objects.requireNonNull(CertificateRepositoryTest.class.getResource("/test.pem")).toURI());
-        byte[] pemData = java.nio.file.Files.readAllBytes(path);
+        CertificateBuilder.Certificate certPem = CertificateBuilder.buildFromPEM(path);
+
+/*
+        //byte[] pemData = java.nio.file.Files.readAllBytes(path);
+
+
+
+
         CertificateFactory factory = CertificateFactory.getInstance("X.509");
         X509Certificate cert = (X509Certificate) factory.generateCertificate(new ByteArrayInputStream(pemData));
+*/
 
         testCertificate = new Certificate();
-        testCertificate.setExpirationDate(cert.getNotAfter());
-        testCertificate.setSubject(cert.getSubjectX500Principal().getName());
-        testCertificate.setIssuer(cert.getIssuerX500Principal().getName());
+        testCertificate.setExpirationDate(certPem.getExpirationDate());
+        testCertificate.setSerialNumber(certPem.getSerialNumber());
+        testCertificate.setExpirationDate(certPem.getExpirationDate());
+        testCertificate.setSubject(certPem.getSubject());
+        testCertificate.setIssuer(certPem.getIssuer());
+        testCertificate.setCertificateData(certPem.getCertificateData());
+        testCertificate.setPrivateKeyData(certPem.getPrivateKeyData());
     }
 
     @AfterEach

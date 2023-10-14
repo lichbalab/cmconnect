@@ -1,5 +1,6 @@
 package by.cyberveska.ksc.model;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
@@ -15,12 +16,17 @@ public class Certificate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String     alias;
+    private BigInteger serialNumber;
+    private Date       expirationDate;
+    private String     subject;
+    private String     issuer;
+
     @Lob
     private byte[] certificateData;
 
-    private Date expirationDate;
-    private String subject;
-    private String issuer;
+    @Lob
+    private byte[] privateKeyData;
 
     public Long getId() {
         return id;
@@ -60,6 +66,30 @@ public class Certificate {
 
     public void setIssuer(String issuer) {
         this.issuer = issuer;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public BigInteger getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(BigInteger serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public byte[] getPrivateKeyData() {
+        return privateKeyData;
+    }
+
+    public void setPrivateKeyData(byte[] privateKeyData) {
+        this.privateKeyData = privateKeyData;
     }
 
     // Getters, setters, constructors, etc.
