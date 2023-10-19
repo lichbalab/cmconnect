@@ -1,4 +1,4 @@
-package by.cyberveska.ksc;
+package com.lichbalab.ksc;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

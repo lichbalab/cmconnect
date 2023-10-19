@@ -1,9 +1,9 @@
-package by.cyberveska.ksc.controller;
+package com.lichbalab.ksc.controller;
 
 import java.util.List;
 
-import by.cyberveska.ksc.model.Certificate;
-import by.cyberveska.ksc.service.CertificateService;
+import com.lichbalab.ksc.model.Certificate;
+import com.lichbalab.ksc.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

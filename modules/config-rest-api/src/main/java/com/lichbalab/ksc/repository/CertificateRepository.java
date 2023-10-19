@@ -1,6 +1,6 @@
-package by.cyberveska.ksc.repository;
+package com.lichbalab.ksc.repository;
 
-import by.cyberveska.ksc.model.Certificate;
+import com.lichbalab.ksc.model.Certificate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

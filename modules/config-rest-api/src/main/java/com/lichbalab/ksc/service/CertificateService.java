@@ -1,9 +1,9 @@
-package by.cyberveska.ksc.service;
+package com.lichbalab.ksc.service;
 
 import java.util.List;
 
-import by.cyberveska.ksc.model.Certificate;
-import by.cyberveska.ksc.repository.CertificateRepository;
+import com.lichbalab.ksc.model.Certificate;
+import com.lichbalab.ksc.repository.CertificateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

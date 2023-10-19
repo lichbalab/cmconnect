@@ -1,4 +1,4 @@
-package by.cyberveska.ksc.model;
+package com.lichbalab.ksc.model;
 
 import java.math.BigInteger;
 import java.util.Date;

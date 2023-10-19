@@ -1,14 +1,13 @@
-package by.cyberveska.ksc.repository;
+package com.lichbalab.ksc.repository;
 
-import java.io.ByteArrayInputStream;
+import java.io.FileReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 import java.util.Objects;
 import java.util.Optional;
 
-import by.cyberveska.ksc.model.Certificate;
+import com.lichbalab.ksc.model.Certificate;
+import com.lichbalab.certificate.CertificateBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CertificateRepositoryTest {
 
     @Container
-    public static PostgreSQLContainer<?> databaseContainer = new PostgreSQLContainer<>("postgres:latest")
+    public static PostgreSQLContainer<?> databaseContainer = getDbContainer()
              .withDatabaseName("test")
              .withUsername("test")
              .withPassword("test");
@@ -51,18 +50,8 @@ public class CertificateRepositoryTest {
     @BeforeEach
     public void setUp() throws Exception {
         // Read the certificate from the provided PEM file
-        Path path = Paths.get(Objects.requireNonNull(CertificateRepositoryTest.class.getResource("/test.pem")).toURI());
-        CertificateBuilder.Certificate certPem = CertificateBuilder.buildFromPEM(path);
-
-/*
-        //byte[] pemData = java.nio.file.Files.readAllBytes(path);
-
-
-
-
-        CertificateFactory factory = CertificateFactory.getInstance("X.509");
-        X509Certificate cert = (X509Certificate) factory.generateCertificate(new ByteArrayInputStream(pemData));
-*/
+        Path                                  path    = Paths.get(Objects.requireNonNull(CertificateRepositoryTest.class.getResource("/test.pem")).toURI());
+        com.lichbalab.certificate.Certificate certPem = CertificateBuilder.buildFromPEM(new FileReader(path.toFile()));
 
         testCertificate = new Certificate();
         testCertificate.setExpirationDate(certPem.getExpirationDate());
@@ -109,5 +98,11 @@ public class CertificateRepositoryTest {
         certificateRepository.deleteById(certificate.getId());
         Optional<Certificate> foundCertificate = certificateRepository.findById(certificate.getId());
         assertThat(foundCertificate).isNotPresent();
+    }
+
+    private static PostgreSQLContainer<?> getDbContainer() {
+        try (PostgreSQLContainer<?> databaseContainer = new PostgreSQLContainer<>("postgres:latest")){
+            return databaseContainer;
+        }
     }
 }

@@ -1,4 +1,4 @@
-package by.cyberveska.ksc;
+package com.lichbalab.ksc;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
