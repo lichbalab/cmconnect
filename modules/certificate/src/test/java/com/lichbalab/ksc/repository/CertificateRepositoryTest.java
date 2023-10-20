@@ -6,8 +6,9 @@ import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.lichbalab.ksc.model.Certificate;
 import com.lichbalab.certificate.CertificateBuilder;
+import com.lichbalab.ksc.model.Certificate;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -87,7 +88,7 @@ public class CertificateRepositoryTest {
         Certificate certificate = entityManager.persistAndFlush(testCertificate);
 
         Optional<Certificate> foundCertificate = certificateRepository.findById(certificate.getId());
-        assertThat(foundCertificate).isPresent();
+        Assertions.assertThat(foundCertificate).isPresent();
         assertThat(foundCertificate.get().getId()).isEqualTo(certificate.getId());
     }
 
@@ -97,7 +98,7 @@ public class CertificateRepositoryTest {
 
         certificateRepository.deleteById(certificate.getId());
         Optional<Certificate> foundCertificate = certificateRepository.findById(certificate.getId());
-        assertThat(foundCertificate).isNotPresent();
+        Assertions.assertThat(foundCertificate).isNotPresent();
     }
 
     private static PostgreSQLContainer<?> getDbContainer() {
@@ -105,4 +106,5 @@ public class CertificateRepositoryTest {
             return databaseContainer;
         }
     }
+
 }

@@ -29,3 +29,6 @@ replay_pid*
 /modules/config-rest-api/config-rest-api.iml
 /modules/certificate-connect/target/
 /modules/config-rest-api/target/
+/modules/certificate/target/
+/modules/certificate/certificate.iml
+/ksc.iml
