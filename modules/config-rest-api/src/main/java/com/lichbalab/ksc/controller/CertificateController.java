@@ -2,6 +2,7 @@ package com.lichbalab.ksc.controller;
 
 import java.util.List;
 
+import com.lichbalab.ksc.dto.CertificateDto;
 import com.lichbalab.ksc.model.Certificate;
 import com.lichbalab.ksc.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,18 @@ public class CertificateController {
     private CertificateService certificateService;
 
     @PostMapping
-    public ResponseEntity<Certificate> createCertificate(@RequestBody Certificate certificate) {
+    public ResponseEntity<CertificateDto> createCertificate(@RequestBody CertificateDto certificate) {
         return new ResponseEntity<>(certificateService.createCertificate(certificate), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Certificate>> getAllCertificates() {
+    public ResponseEntity<List<CertificateDto>> getAllCertificates() {
         return new ResponseEntity<>(certificateService.getAllCertificates(), HttpStatus.OK);
     }
 
     @GetMapping("/{certificateId}")
-    public ResponseEntity<Certificate> getCertificateById(@PathVariable Long certificateId) {
-        Certificate certificate = certificateService.getCertificateById(certificateId);
+    public ResponseEntity<CertificateDto> getCertificateById(@PathVariable Long certificateId) {
+        CertificateDto certificate = certificateService.getCertificateById(certificateId);
         if (certificate != null) {
             return new ResponseEntity<>(certificate, HttpStatus.OK);
         }
@@ -43,8 +44,8 @@ public class CertificateController {
     }
 
     @PutMapping("/{certificateId}")
-    public ResponseEntity<Certificate> updateCertificate(@PathVariable Long certificateId, @RequestBody Certificate certificate) {
-        Certificate updatedCertificate = certificateService.updateCertificate(certificateId, certificate);
+    public ResponseEntity<CertificateDto> updateCertificate(@PathVariable Long certificateId, @RequestBody CertificateDto certificate) {
+        CertificateDto updatedCertificate = certificateService.updateCertificate(certificateId, certificate);
         if (updatedCertificate != null) {
             return new ResponseEntity<>(updatedCertificate, HttpStatus.OK);
         }
