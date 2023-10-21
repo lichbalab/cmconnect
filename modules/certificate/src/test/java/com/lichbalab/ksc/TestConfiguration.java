@@ -13,9 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 
 /**
- * The class added just for package scanning purpose.
+ * The class added just for package scanning investigation.
  */
-//@SpringBootTest
 @ContextConfiguration(classes = {CertificateService.class})
 @DataJpaTest(properties = { "spring.test.database.replace=none"})
 @EnableAutoConfiguration

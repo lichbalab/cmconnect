@@ -51,7 +51,7 @@ public class CertificateRepositoryTest {
     @BeforeEach
     public void setUp() throws Exception {
         // Read the certificate from the provided PEM file
-        Path                                  path    = Paths.get(Objects.requireNonNull(CertificateRepositoryTest.class.getResource("/test.pem")).toURI());
+        Path                                  path    = Paths.get(Objects.requireNonNull(CertificateRepositoryTest.class.getResource("/certs/test.pem")).toURI());
         com.lichbalab.certificate.Certificate certPem = CertificateBuilder.buildFromPEM(new FileReader(path.toFile()));
 
         testCertificate = new Certificate();

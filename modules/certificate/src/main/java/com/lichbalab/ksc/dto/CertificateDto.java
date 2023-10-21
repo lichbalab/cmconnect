@@ -3,6 +3,9 @@ package com.lichbalab.ksc.dto;
 import java.math.BigInteger;
 import java.util.Date;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 public class CertificateDto {
 
     private Long       id;
@@ -76,5 +79,19 @@ public class CertificateDto {
 
     public void setPrivateKeyData(byte[] privateKeyData) {
         this.privateKeyData = privateKeyData;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof CertificateDto that)) return false;
+
+        return new EqualsBuilder().append(serialNumber, that.serialNumber).append(expirationDate, that.expirationDate).append(subject, that.subject).append(issuer, that.issuer).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(serialNumber).append(expirationDate).append(subject).append(issuer).toHashCode();
     }
 }
