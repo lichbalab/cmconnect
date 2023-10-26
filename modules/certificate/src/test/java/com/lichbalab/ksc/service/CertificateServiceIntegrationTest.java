@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.lichbalab.certificate.CertificateBuilder;
+import com.lichbalab.certificate.CertificateUtils;
 import com.lichbalab.ksc.dto.CertificateDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -92,7 +92,7 @@ public class CertificateServiceIntegrationTest {
     private static CertificateDto createTestCertificate(Path path) {
         com.lichbalab.certificate.Certificate certPem = null;
         try {
-            certPem = CertificateBuilder.buildFromPEM(new FileReader(path.toFile()));
+            certPem = CertificateUtils.buildFromPEM(new FileReader(path.toFile()));
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -103,7 +103,7 @@ public class CertificateServiceIntegrationTest {
         testCertificate.setExpirationDate(certPem.getExpirationDate());
         testCertificate.setSubject(certPem.getSubject());
         testCertificate.setIssuer(certPem.getIssuer());
-        testCertificate.setCertificateData(certPem.getCertificateData());
+        testCertificate.setCertificateData(certPem.getCertificateChainData());
         testCertificate.setPrivateKeyData(certPem.getPrivateKeyData());
 
         return testCertificate;

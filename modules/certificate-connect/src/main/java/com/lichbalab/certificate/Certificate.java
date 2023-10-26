@@ -2,21 +2,25 @@ package com.lichbalab.certificate;
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.List;
+
+import org.bouncycastle.cert.X509CertificateHolder;
 
 public class Certificate {
-    private byte[]         certificateData;
-    private byte[]         privateKeyData;
-    private String         subject;
-    private String         issuer;
-    private java.util.Date expirationDate;
-    private BigInteger     serialNumber;
+    private List<X509CertificateHolder> certChain;
+    private byte[]                      certificateChainData;
+    private byte[]                      privateKeyData;
+    private String                      subject;
+    private String                      issuer;
+    private Date                        expirationDate;
+    private BigInteger                  serialNumber;
 
-    public byte[] getCertificateData() {
-        return certificateData;
+    public byte[] getCertificateChainData() {
+        return certificateChainData;
     }
 
-    public void setCertificateData(byte[] certificateData) {
-        this.certificateData = certificateData;
+    public void setCertificateChainData(byte[] certificateChainData) {
+        this.certificateChainData = certificateChainData;
     }
 
     public byte[] getPrivateKeyData() {
@@ -57,5 +61,13 @@ public class Certificate {
 
     public void setSerialNumber(BigInteger serialNumber) {
         this.serialNumber = serialNumber;
+    }
+
+    public List<X509CertificateHolder> getCertChain() {
+        return certChain;
+    }
+
+    public void setCertChain(List<X509CertificateHolder> certChain) {
+        this.certChain = certChain;
     }
 }

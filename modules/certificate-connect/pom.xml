@@ -23,16 +23,19 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.68</version> <!-- Use the latest version -->
+            <version>1.69</version> <!-- Use the latest version -->
         </dependency>
 
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcpkix-jdk15on</artifactId>
-            <version>1.68</version> <!-- Use the latest version -->
+            <version>1.69</version> <!-- Use the latest version -->
         </dependency>
-        <!-- Thanks for using https://jar-download.com -->
 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
 
         <!-- JUnit Jupiter API for writing tests -->
         <dependency>

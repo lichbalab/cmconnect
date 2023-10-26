@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.lichbalab.certificate.CertificateBuilder;
+import com.lichbalab.certificate.CertificateUtils;
 import com.lichbalab.ksc.model.Certificate;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
@@ -52,7 +52,7 @@ public class CertificateRepositoryTest {
     public void setUp() throws Exception {
         // Read the certificate from the provided PEM file
         Path                                  path    = Paths.get(Objects.requireNonNull(CertificateRepositoryTest.class.getResource("/certs/test.pem")).toURI());
-        com.lichbalab.certificate.Certificate certPem = CertificateBuilder.buildFromPEM(new FileReader(path.toFile()));
+        com.lichbalab.certificate.Certificate certPem = CertificateUtils.buildFromPEM(new FileReader(path.toFile()));
 
         testCertificate = new Certificate();
         testCertificate.setExpirationDate(certPem.getExpirationDate());
@@ -60,7 +60,7 @@ public class CertificateRepositoryTest {
         testCertificate.setExpirationDate(certPem.getExpirationDate());
         testCertificate.setSubject(certPem.getSubject());
         testCertificate.setIssuer(certPem.getIssuer());
-        testCertificate.setCertificateData(certPem.getCertificateData());
+        testCertificate.setCertificateData(certPem.getCertificateChainData());
         testCertificate.setPrivateKeyData(certPem.getPrivateKeyData());
     }
 
