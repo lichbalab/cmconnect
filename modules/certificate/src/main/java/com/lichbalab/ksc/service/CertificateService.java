@@ -17,13 +17,6 @@ public class CertificateService {
     @Autowired
     private CertificateMapper     mapper;
 
-/*
-    public CertificateService(CertificateRepository certificateRepository, CertificateMapper mapper) {
-        this.certificateRepository = certificateRepository;
-        this.mapper = mapper;
-    }
-*/
-
     public CertificateDto createCertificate(CertificateDto certificate) {
         Certificate dom = mapper.dtoToDom(certificate);
         return mapper.domToDto(certificateRepository.save(dom));

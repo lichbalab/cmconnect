@@ -11,7 +11,6 @@ import java.util.stream.Stream;
 import com.lichbalab.certificate.CertificateBuilder;
 import com.lichbalab.ksc.dto.CertificateDto;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -22,27 +21,18 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 
 @Testcontainers
-@DataJpaTest(properties = { "spring.test.database.replace=none"})
+@DataJpaTest(properties = {"spring.test.database.replace=none"})
 @ComponentScan(basePackages = "com.lichbalab.ksc")
 public class CertificateServiceIntegrationTest {
-
-    private final Stream<Path> CERT_PATHS = getCertPaths();
-    private static List<CertificateDto> CERTS;
-
-    @BeforeAll
-    static void prepareTests() {
-        CERTS = getCertPaths().map(CertificateServiceIntegrationTest::createTestCertificate).toList();
-    }
+    private final static List<CertificateDto> CERTS = getCertPaths().map(CertificateServiceIntegrationTest::createTestCertificate).toList();
 
     @Container
     public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:latest")
-        .withDatabaseName("test")
-        .withUsername("user")
-        .withPassword("password");
+             .withDatabaseName("test")
+             .withUsername("user")
+             .withPassword("password");
 
     @Autowired
     private CertificateService certificateService;
@@ -58,64 +48,54 @@ public class CertificateServiceIntegrationTest {
     @Test
     void testCreateCertificate() throws Exception {
         List<CertificateDto> createdCerts = CERTS.stream().map(certificateService::createCertificate).toList();
+
         Assertions.assertEquals(CERTS, createdCerts, "Certificates creation results are unexpected");
     }
 
     @Test
-    public void testGetAllCertificates() throws Exception {
+    void testGetAllCertificates() {
         // Create a few test certificates
-        CERTS.forEach(certificateService::createCertificate);        // Set properties for dtos
-        
+        CERTS.forEach(certificateService::createCertificate);
+
         List<CertificateDto> certificates = certificateService.getAllCertificates();
-        
+
         Assertions.assertEquals(certificates.size(), CERTS.size(), "Getting all certificates works unexpected.");
-    }
-
-    //@Test
-    public void testGetCertificateById() throws Exception {
-        //CertificateDto dto = createTestCertificate();
-        // Set properties for dto
-        
-        //CertificateDto created = certificateService.createCertificate(dto);
-        //CertificateDto retrieved = certificateService.getCertificateById(created.getId());
-        
-        //assertThat(retrieved).isEqualTo(created);
+        Assertions.assertEquals(CERTS, certificates, "Getting all certificates works unexpected.");
     }
 
     @Test
-    public void testUpdateCertificate() throws Exception {
+    void testGetCertificateById() {
+        CertificateDto created   = certificateService.createCertificate(CERTS.get(0));
+        CertificateDto retrieved = certificateService.getCertificateById(created.getId());
+
+        Assertions.assertEquals(created, retrieved, "Wrong certificate found by id.");
+    }
+
+    @Test
+    void testUpdateCertificate() throws Exception {
         CertificateDto created = certificateService.createCertificate(CERTS.get(0));
-        
-        // Update some properties of created
+
         CertificateDto updated = certificateService.updateCertificate(created.getId(), created);
-        
-        assertThat(updated).isNotNull();
-        // Assert updated properties
+
+        Assertions.assertEquals(created, updated, "Certificate is not updated correctly.");
     }
 
     @Test
-    public void testDeleteCertificate() throws Exception {
-
+    void testDeleteCertificate() {
         CertificateDto created = certificateService.createCertificate(CERTS.get(0));
         certificateService.deleteCertificate(created.getId());
-        
+
         CertificateDto retrieved = certificateService.getCertificateById(created.getId());
-        assertThat(retrieved).isNull();
+        Assertions.assertNull(retrieved, "Certificate has not been deleted.");
     }
 
     private static CertificateDto createTestCertificate(Path path) {
-        //Path                                  path    = Paths.get(Objects.requireNonNull(CertificateServiceIntegrationTest.class.getResource("/test.pem")).toURI());
         com.lichbalab.certificate.Certificate certPem = null;
         try {
             certPem = CertificateBuilder.buildFromPEM(new FileReader(path.toFile()));
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-
-/*
-        ClassLoader classLoader = CertificateServiceIntegrationTest.class.getClassLoader();
-        Object         resourceURL = CertificateServiceIntegrationTest.class.getResource("/certs");
-*/
 
         CertificateDto testCertificate = new CertificateDto();
         testCertificate.setExpirationDate(certPem.getExpirationDate());
