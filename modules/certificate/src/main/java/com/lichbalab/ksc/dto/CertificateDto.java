@@ -13,9 +13,9 @@ public class CertificateDto {
     private BigInteger serialNumber;
     private Date       expirationDate;
     private String     subject;
-    private String     issuer;
-    private byte[]     certificateData;
-    private byte[]     privateKeyData;
+    private String issuer;
+    private byte[] certificateChainData;
+    private byte[] privateKeyData;
 
     public Long getId() {
         return id;
@@ -65,12 +65,12 @@ public class CertificateDto {
         this.issuer = issuer;
     }
 
-    public byte[] getCertificateData() {
-        return certificateData;
+    public byte[] getCertificateChainData() {
+        return certificateChainData;
     }
 
-    public void setCertificateData(byte[] certificateData) {
-        this.certificateData = certificateData;
+    public void setCertificateChainData(byte[] certificateChainData) {
+        this.certificateChainData = certificateChainData;
     }
 
     public byte[] getPrivateKeyData() {

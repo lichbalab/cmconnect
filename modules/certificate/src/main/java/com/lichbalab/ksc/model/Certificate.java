@@ -23,7 +23,7 @@ public class Certificate {
     private String     issuer;
 
     @Lob
-    private byte[] certificateData;
+    private byte[] certificateChainData;
 
     @Lob
     private byte[] privateKeyData;
@@ -36,12 +36,12 @@ public class Certificate {
         this.id = id;
     }
 
-    public byte[] getCertificateData() {
-        return certificateData;
+    public byte[] getCertificateChainData() {
+        return certificateChainData;
     }
 
-    public void setCertificateData(byte[] certificateData) {
-        this.certificateData = certificateData;
+    public void setCertificateChainData(byte[] certificateChainData) {
+        this.certificateChainData = certificateChainData;
     }
 
     public Date getExpirationDate() {

@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.junit.jupiter.api.Assertions;
@@ -24,9 +25,8 @@ public class CertificateUtilsTest {
     }
 
     private static List<Path> getCertPaths() {
-        try {
-            Path certDir = Paths.get(CertificateUtilsTest.class.getResource("/certs").toURI());
-            return Files.list(certDir).toList();
+        try (Stream<Path> streamPath = Files.list(Paths.get(CertificateUtilsTest.class.getResource("/certs").toURI()))) {
+            return streamPath.toList();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

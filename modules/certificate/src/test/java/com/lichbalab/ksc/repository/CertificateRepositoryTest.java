@@ -60,7 +60,7 @@ public class CertificateRepositoryTest {
         testCertificate.setExpirationDate(certPem.getExpirationDate());
         testCertificate.setSubject(certPem.getSubject());
         testCertificate.setIssuer(certPem.getIssuer());
-        testCertificate.setCertificateData(certPem.getCertificateChainData());
+        testCertificate.setCertificateChainData(certPem.getCertificateChainData());
         testCertificate.setPrivateKeyData(certPem.getPrivateKeyData());
     }
 
