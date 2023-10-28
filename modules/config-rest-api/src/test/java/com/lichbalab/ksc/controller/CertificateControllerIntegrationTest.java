@@ -48,9 +48,9 @@ public class CertificateControllerIntegrationTest {
         registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
         registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
     }
-    
+
     @Container
-    public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:13.4")
+    public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:16-alpine")
              .withDatabaseName("test")
              .withUsername("test")
              .withPassword("test");
@@ -101,7 +101,7 @@ public class CertificateControllerIntegrationTest {
     }
 
     @Test
-    public void testGetCertificateById() {
+    void testGetCertificateById() {
         // Assuming a certificate with ID 1 exists in the database for the test
         List<CertificateDto> createdCerts = CERTS.stream().map(certificateService::createCertificate).toList();
         for (CertificateDto cert : createdCerts) {
