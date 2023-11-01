@@ -4,4 +4,13 @@
 mvn clean package
 
 ## How to start
-java -jar target/ksc-0.0.1-SNAPSHOT.jar
+Go to the module config-rest-api and run the following command:
+```bash
+java -jar target/config-rest-api-0.0.1-SNAPSHOT.jar
+```
+Start in debug mode:
+```bash
+java -jar  -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:5005 target/config-rest-api-0.0.1-SNAPSHOT.jar
+```
+## OAS 3.0 API Documentation
+http://localhost:8080/swagger-ui.html
