@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import com.lichbalab.certificate.CertificateUtils;
 import com.lichbalab.ksc.model.Certificate;
+import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,7 +57,7 @@ public class CertificateRepositoryTest {
 
         testCertificate = new Certificate();
         testCertificate.setExpirationDate(certPem.getExpirationDate());
-        testCertificate.setSerialNumber(certPem.getSerialNumber());
+        //testCertificate.setSerialNumber(certPem.getSerialNumber());
         testCertificate.setExpirationDate(certPem.getExpirationDate());
         testCertificate.setSubject(certPem.getSubject());
         testCertificate.setIssuer(certPem.getIssuer());
@@ -77,15 +78,13 @@ public class CertificateRepositoryTest {
 
     @Test
     void testFindAllCertificates() {
-        entityManager.persist(testCertificate);
-        entityManager.flush();
-
+        entityManager.persistAndFlush(testCertificate);
         assertThat(certificateRepository.findAll()).hasSize(1);
     }
 
     @Test
     void testFindCertificateById() {
-        Certificate certificate = entityManager.persistAndFlush(testCertificate);
+        Certificate certificate = certificateRepository.save(testCertificate);
 
         Optional<Certificate> foundCertificate = certificateRepository.findById(certificate.getId());
         Assertions.assertThat(foundCertificate).isPresent();
@@ -94,7 +93,7 @@ public class CertificateRepositoryTest {
 
     @Test
     void testDeleteCertificateById() {
-        Certificate certificate = entityManager.persistAndFlush(testCertificate);
+        Certificate certificate = entityManager.persist(testCertificate);
 
         certificateRepository.deleteById(certificate.getId());
         Optional<Certificate> foundCertificate = certificateRepository.findById(certificate.getId());

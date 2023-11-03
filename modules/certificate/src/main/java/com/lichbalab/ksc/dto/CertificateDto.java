@@ -13,9 +13,9 @@ public class CertificateDto {
     private BigInteger serialNumber;
     private Date       expirationDate;
     private String     subject;
-    private String issuer;
-    private byte[] certificateChainData;
-    private byte[] privateKeyData;
+    private String     issuer;
+    private byte[]     certificateChainData;
+    private byte[]     privateKeyData;
 
     public Long getId() {
         return id;
