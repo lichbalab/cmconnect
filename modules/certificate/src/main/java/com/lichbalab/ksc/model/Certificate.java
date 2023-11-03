@@ -10,6 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.SequenceGenerator;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.usertype.UserType;
 
@@ -104,5 +106,19 @@ public class Certificate {
 
     public void setPrivateKeyData(byte[] privateKeyData) {
         this.privateKeyData = privateKeyData;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Certificate that)) return false;
+
+        return new EqualsBuilder().append(alias, that.alias).append(serialNumber, that.serialNumber).append(subject, that.subject).append(issuer, that.issuer).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(alias).append(serialNumber).append(subject).append(issuer).toHashCode();
     }
 }

@@ -1,33 +1,30 @@
 package com.lichbalab.ksc.repository;
 
-import java.io.FileReader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Objects;
+import java.util.List;
 import java.util.Optional;
 
-import com.lichbalab.certificate.CertificateUtils;
+import com.lichbalab.ksc.CertificateTestHelper;
+import com.lichbalab.ksc.mapper.CertificateMapper;
 import com.lichbalab.ksc.model.Certificate;
-import jakarta.persistence.EntityManager;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @Testcontainers
 @DataJpaTest(properties = { "spring.test.database.replace=none"})
+@ComponentScan(basePackages = "com.lichbalab.ksc")
 public class CertificateRepositoryTest {
-
     @Container
     public static PostgreSQLContainer<?> databaseContainer = getDbContainer()
              .withDatabaseName("test")
@@ -35,12 +32,15 @@ public class CertificateRepositoryTest {
              .withPassword("test");
 
     @Autowired
+    private CertificateMapper mapper;
+
+    @Autowired
     private TestEntityManager entityManager;
 
     @Autowired
     private CertificateRepository certificateRepository;
 
-    private static Certificate testCertificate;
+    private static List<Certificate> testCertificates;
 
     @DynamicPropertySource
     public static void setDataSourceProperties(DynamicPropertyRegistry registry) {
@@ -51,53 +51,54 @@ public class CertificateRepositoryTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        // Read the certificate from the provided PEM file
-        Path                                  path    = Paths.get(Objects.requireNonNull(CertificateRepositoryTest.class.getResource("/certs/test.pem")).toURI());
-        com.lichbalab.certificate.Certificate certPem = CertificateUtils.buildFromPEM(new FileReader(path.toFile()));
-
-        testCertificate = new Certificate();
-        testCertificate.setExpirationDate(certPem.getExpirationDate());
-        //testCertificate.setSerialNumber(certPem.getSerialNumber());
-        testCertificate.setExpirationDate(certPem.getExpirationDate());
-        testCertificate.setSubject(certPem.getSubject());
-        testCertificate.setIssuer(certPem.getIssuer());
-        testCertificate.setCertificateChainData(certPem.getCertificateChainData());
-        testCertificate.setPrivateKeyData(certPem.getPrivateKeyData());
+        testCertificates = CertificateTestHelper.CERTS_DTO.stream().map(mapper::dtoToDom).toList();
+        Assertions.assertFalse(testCertificates.isEmpty(), "Test certificates list is empty");
     }
 
     @AfterEach
     public void tearDown() {
-        // Clean up resources, if needed
+        CertificateTestHelper.cleanUpCertificates(entityManager);
     }
 
     @Test
+    @Commit
     void testSaveCertificate() {
-        Certificate certificate = certificateRepository.save(testCertificate);
-        assertThat(certificate.getId()).isNotNull();
+        List<Certificate> savedCertificates = testCertificates.stream().map(certificateRepository::save).toList();
+        Assertions.assertEquals(testCertificates.size(), savedCertificates.size(), "Certificates saving results are unexpected");
+        Assertions.assertEquals(testCertificates, savedCertificates, "Certificates saving results are unexpected");
     }
 
     @Test
+    @Commit
     void testFindAllCertificates() {
-        entityManager.persistAndFlush(testCertificate);
-        assertThat(certificateRepository.findAll()).hasSize(1);
+        testCertificates.forEach(entityManager::persistAndFlush);
+        List<Certificate> foundCertificates = certificateRepository.findAll();
+        Assertions.assertEquals(testCertificates.size(), foundCertificates.size(), "Getting all certificates works unexpected.");
+        Assertions.assertEquals(testCertificates, foundCertificates, "Getting all certificates works unexpected.");
     }
 
     @Test
+    @Commit
     void testFindCertificateById() {
-        Certificate certificate = certificateRepository.save(testCertificate);
+        List<Certificate> savedCertificates = testCertificates.stream().map(entityManager::persistAndFlush).toList();
 
-        Optional<Certificate> foundCertificate = certificateRepository.findById(certificate.getId());
-        Assertions.assertThat(foundCertificate).isPresent();
-        assertThat(foundCertificate.get().getId()).isEqualTo(certificate.getId());
+        for (Certificate certificate : savedCertificates) {
+            Optional<Certificate> foundCertificate = certificateRepository.findById(certificate.getId());
+            Assertions.assertTrue(foundCertificate.isPresent(), "Certificate not found by id.");
+            Assertions.assertEquals(certificate, foundCertificate.get(), "Wrong certificate found by id.");
+        }
     }
 
     @Test
+    @Commit
     void testDeleteCertificateById() {
-        Certificate certificate = entityManager.persist(testCertificate);
+        List<Certificate> savedCertificates = testCertificates.stream().map(entityManager::persistAndFlush).toList();
 
-        certificateRepository.deleteById(certificate.getId());
-        Optional<Certificate> foundCertificate = certificateRepository.findById(certificate.getId());
-        Assertions.assertThat(foundCertificate).isNotPresent();
+       for (Certificate certificate : savedCertificates) {
+           certificateRepository.deleteById(certificate.getId());
+           Certificate foundCertificate = entityManager.find(Certificate.class, certificate.getId());
+           Assertions.assertNull(foundCertificate, "Certificate is not deleted.");
+       }
     }
 
     private static PostgreSQLContainer<?> getDbContainer() {
@@ -105,5 +106,4 @@ public class CertificateRepositoryTest {
             return databaseContainer;
         }
     }
-
 }

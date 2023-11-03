@@ -1,14 +1,8 @@
 package com.lichbalab.ksc.service;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Stream;
 
-import com.lichbalab.certificate.CertificateUtils;
+import com.lichbalab.ksc.CertificateTestHelper;
 import com.lichbalab.ksc.dto.CertificateDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,7 +20,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @DataJpaTest(properties = {"spring.test.database.replace=none"})
 @ComponentScan(basePackages = "com.lichbalab.ksc")
 public class CertificateServiceIntegrationTest {
-    private final static List<CertificateDto> CERTS = getCertPaths().map(CertificateServiceIntegrationTest::createTestCertificate).toList();
+    private final static List<CertificateDto> CERTS = CertificateTestHelper.CERTS_DTO;
 
     @Container
     public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:latest")
@@ -46,7 +40,7 @@ public class CertificateServiceIntegrationTest {
 
 
     @Test
-    void testCreateCertificate() throws Exception {
+    void testCreateCertificate() {
         List<CertificateDto> createdCerts = CERTS.stream().map(certificateService::createCertificate).toList();
 
         Assertions.assertEquals(CERTS, createdCerts, "Certificates creation results are unexpected");
@@ -89,32 +83,4 @@ public class CertificateServiceIntegrationTest {
         Assertions.assertNull(retrieved, "Certificate has not been deleted.");
     }
 
-    private static CertificateDto createTestCertificate(Path path) {
-        com.lichbalab.certificate.Certificate certPem = null;
-        try {
-            certPem = CertificateUtils.buildFromPEM(new FileReader(path.toFile()));
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-
-        CertificateDto testCertificate = new CertificateDto();
-        testCertificate.setExpirationDate(certPem.getExpirationDate());
-        testCertificate.setSerialNumber(certPem.getSerialNumber());
-        testCertificate.setExpirationDate(certPem.getExpirationDate());
-        testCertificate.setSubject(certPem.getSubject());
-        testCertificate.setIssuer(certPem.getIssuer());
-        testCertificate.setCertificateChainData(certPem.getCertificateChainData());
-        testCertificate.setPrivateKeyData(certPem.getPrivateKeyData());
-
-        return testCertificate;
-    }
-
-    private static Stream<Path> getCertPaths() {
-        try {
-            Path certDir = Paths.get(CertificateServiceIntegrationTest.class.getResource("/certs").toURI());
-            return Files.list(certDir);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
 }
