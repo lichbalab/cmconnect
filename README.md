@@ -1,7 +1,14 @@
 # KeyStoreConnect
 
 ## How to build
+```bash
 mvn clean package
+```
+
+## How to build docker image
+```bash
+docker build -t ksc:0.0.1 .
+```
 
 ## How to start
 Go to the module config-rest-api and run the following command:

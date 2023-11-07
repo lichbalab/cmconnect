@@ -44,9 +44,11 @@ public class CertificateRepositoryTest {
 
     @DynamicPropertySource
     public static void setDataSourceProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", databaseContainer::getJdbcUrl);
-        registry.add("spring.datasource.username", databaseContainer::getUsername);
-        registry.add("spring.datasource.password", databaseContainer::getPassword);
+        registry.add("DB_HOST", databaseContainer::getHost);
+        registry.add("DB_PORT", databaseContainer::getFirstMappedPort);
+        registry.add("DB_NAME", databaseContainer::getDatabaseName);
+        registry.add("DB_USERNAME", databaseContainer::getUsername);
+        registry.add("DB_PASSWORD", databaseContainer::getPassword);
     }
 
     @BeforeEach
@@ -102,7 +104,7 @@ public class CertificateRepositoryTest {
     }
 
     private static PostgreSQLContainer<?> getDbContainer() {
-        try (PostgreSQLContainer<?> databaseContainer = new PostgreSQLContainer<>("postgres:latest")){
+        try (PostgreSQLContainer<?> databaseContainer = new PostgreSQLContainer<>("postgres:16-alpine")){
             return databaseContainer;
         }
     }

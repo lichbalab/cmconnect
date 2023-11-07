@@ -15,10 +15,10 @@ COPY modules /ksc/modules/
 RUN mvn clean package -Dmaven.test.skip=true
 
 # Set the path to the config-rest-api JAR file
-ARG JAR_FILE=/ksc/modules/config-rest-api/target/*.jar
+ARG JAR_FILE=/ksc/modules/config-rest-api/target/config-rest-api-*.jar
 
 # Copy the config-rest-api JAR file into the image
-COPY ${JAR_FILE} /ksc/config-rest-api.jar
+RUN cp ${JAR_FILE} /ksc/config-rest-api.jar
 
 # Specify the entry point for the application
 ENTRYPOINT ["java","-jar","/ksc/config-rest-api.jar"]
