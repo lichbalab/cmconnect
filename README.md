@@ -10,6 +10,11 @@ mvn clean package
 docker build -t ksc:0.0.1 .
 ```
 
+## How to run docker image
+```bash
+docker-compose up -d
+```
+
 ## How to start
 Go to the module config-rest-api and run the following command:
 ```bash
