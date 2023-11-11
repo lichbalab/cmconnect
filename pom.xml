@@ -29,6 +29,7 @@
         <module>modules/config-rest-api</module>
         <module>modules/certificate-connect</module>
         <module>modules/certificate</module>
+        <module>modules/ui</module>
     </modules>
 
     <dependencyManagement>
