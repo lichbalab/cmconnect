@@ -36,3 +36,4 @@ replay_pid*
 /modules/ui/src/main/ui/node_modules/
 /modules/ui/src/main/ui/build/
 /modules/ui/target/
+/modules/ui/ui.iml
