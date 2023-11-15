@@ -29,12 +29,16 @@
                     <workingDirectory>src/main/ui</workingDirectory> <!-- adjust if your path is different -->
                 </configuration>
                 <executions>
+
+                    <!-- Install Node and NPM -->
                     <execution>
                         <id>install node and npm</id>
                         <goals>
                             <goal>install-node-and-npm</goal>
                         </goals>
                     </execution>
+
+                    <!-- Run npm install -->
                     <execution>
                         <id>npm install</id>
                         <goals>
@@ -44,6 +48,18 @@
                             <arguments>install</arguments>
                         </configuration>
                     </execution>
+
+                    <!-- Install @mui/material package nd its peer dependencies -->
+                    <execution>
+                        <id>npm install specific packages</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install @mui/material @emotion/react @emotion/styled</arguments>
+                        </configuration>
+                    </execution>
+
                     <execution>
                         <id>npm run build</id>
                         <goals>

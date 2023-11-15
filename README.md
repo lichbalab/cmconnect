@@ -7,7 +7,7 @@ mvn clean package
 
 ## How to build docker image
 ```bash
-docker build -t ksc:0.0.1 .
+docker build -t lichbalab:ksc-0.0.1 .
 ```
 
 ## How to run docker image
