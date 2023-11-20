@@ -3,9 +3,7 @@ version: '3'
 services:
   # Application service for config-rest-api
   ksc:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: lichbalab:ksc-0.0.1
     ports:
       - "8080:8080"
     restart: always
