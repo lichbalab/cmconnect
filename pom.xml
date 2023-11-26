@@ -17,6 +17,19 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <name>Key Store Connect</name>
+    <url>https://github.com/lichbalab/ksconnect</url>
+    <developers>
+        <developer>
+            <id>kbokiy</id>
+            <name>Kiryl Bokiy</name>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
