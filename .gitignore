@@ -37,3 +37,5 @@ replay_pid*
 /modules/ui/src/main/ui/build/
 /modules/ui/target/
 /modules/ui/ui.iml
+/modules/config-rest-api/rest-api.iml
+/modules/rest-api/rest-api.iml

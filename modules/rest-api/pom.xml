@@ -9,10 +9,10 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>config-rest-api</artifactId>
+	<artifactId>rest-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>config-rest-api</name>
-	<description>Key Store Connect Config REST API</description>
+	<name>rest-api</name>
+	<description>Key Store Connect REST API</description>
 	<properties>
 		<java.version>21</java.version>
 	</properties>
