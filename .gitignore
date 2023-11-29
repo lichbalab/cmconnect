@@ -39,3 +39,6 @@ replay_pid*
 /modules/ui/ui.iml
 /modules/config-rest-api/rest-api.iml
 /modules/rest-api/rest-api.iml
+/modules/rest-api/target/
+/modules/ksc-document/ksc-document.iml
+/modules/ksc-document/target/

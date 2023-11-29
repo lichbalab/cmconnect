@@ -9,10 +9,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/signatures")
-public class SignaturesController {
+public class SignatureController {
 
-    @PostMapping("/upload")
-    public ResponseEntity<MultipartFile> createCertificateFromFile(@RequestParam("document") MultipartFile document, @RequestParam("alias") String certificateAlias) {
+    @PostMapping("/create")
+    public ResponseEntity<MultipartFile> createSignature(@RequestParam("document") MultipartFile document, @RequestParam("alias") String certificateAlias) {
         return null;
     }
 }
