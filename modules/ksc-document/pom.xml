@@ -26,7 +26,29 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>eu.europa.ec.joinup.sd-dss</groupId>
+            <artifactId>dss-pades</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.europa.ec.joinup.sd-dss</groupId>
+            <artifactId>dss-token</artifactId>
+        </dependency>
+
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>eu.europa.ec.joinup.sd-dss</groupId>
+                <artifactId>dss-bom</artifactId>
+                <version>5.13.RC1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 
 </project>

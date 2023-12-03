@@ -2,7 +2,10 @@ package com.lichbalab.ksc;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+
+import com.lichbalab.certificate.Certificate;
+import org.bouncycastle.openssl.PEMException;
 
 public interface DocSignService {
     /**
@@ -11,6 +14,6 @@ public interface DocSignService {
      * @param certificate Certificate for signature.
      * @return Signed document
      */
-    OutputStream sign(InputStream doc, Certificate certificate);
+    OutputStream signPdf(InputStream doc, Certificate certificate) throws CertificateException, PEMException;
 
 }

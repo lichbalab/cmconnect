@@ -4,7 +4,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Reader;
+import java.security.KeyStore;
 import java.security.PrivateKey;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +15,8 @@ import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.openssl.PEMException;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
@@ -101,4 +106,44 @@ public class CertificateUtils {
 
         return certChain;
     }
+
+    public static PrivateKey convertBytesToPrivateKey(byte[] privateKeyBytes) throws PEMException {
+        PrivateKeyInfo privateKeyInfo = PrivateKeyInfo.getInstance(privateKeyBytes);
+
+        // Convert to PrivateKey
+        JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider("BC");
+        return converter.getPrivateKey(privateKeyInfo);
+    }
+
+    public static byte[] generatePKCS12Keystore(Certificate certificate) throws Exception {
+        KeyStore keyStore = KeyStore.getInstance("PKCS12");
+        keyStore.load(null, null); // Initialize the keystore
+        PrivateKey privateKey = convertBytesToPrivateKey(certificate.getPrivateKeyData());
+
+
+        java.security.cert.Certificate[] certificateChain = getCertificateChain(certificate);
+        keyStore.setKeyEntry("alias", privateKey, null, certificateChain);
+
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        keyStore.store(bos, null);
+        return bos.toByteArray();
+    }
+
+    private static X509Certificate getFromCertHolder(X509CertificateHolder certificateHolder) {
+        JcaX509CertificateConverter converter = new JcaX509CertificateConverter();
+
+        try {
+            return converter.getCertificate(certificateHolder);
+        } catch (CertificateException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public static X509Certificate[] getCertificateChain(Certificate certificate) {
+        List<X509Certificate> certList = certificate.getCertChain().stream().map(CertificateUtils::getFromCertHolder).toList();
+        return certList.toArray(new X509Certificate[]{});
+    }
+
+
 }
