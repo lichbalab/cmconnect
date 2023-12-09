@@ -1,4 +1,4 @@
-package com.lichbalab.ksc;
+package com.lichbalab.ksc.doc;
 
 import java.security.PrivateKey;
 

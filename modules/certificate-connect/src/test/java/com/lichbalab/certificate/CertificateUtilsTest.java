@@ -12,7 +12,7 @@ import org.bouncycastle.cert.X509CertificateHolder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class CertificateUtilsTest {
+class CertificateUtilsTest {
 
     @Test
     void byteArrayToCertChainTest() throws IOException {

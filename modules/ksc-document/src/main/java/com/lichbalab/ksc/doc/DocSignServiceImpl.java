@@ -1,7 +1,8 @@
-package com.lichbalab.ksc;
+package com.lichbalab.ksc.doc;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.KeyStore;
 
 import com.lichbalab.certificate.Certificate;
 import com.lichbalab.certificate.CertificateUtils;
@@ -23,7 +24,7 @@ import org.bouncycastle.openssl.PEMException;
 public class DocSignServiceImpl implements DocSignService {
 
         @Override
-        public OutputStream signPdf(InputStream doc, Certificate certificate) throws PEMException {
+        public DSSDocument signPdf(InputStream doc, Certificate certificate) {
 
                 // Get a token connection based on a pkcs12 file commonly used to store private
                 // keys with accompanying public key certificates, protected with a password-based
@@ -33,7 +34,7 @@ public class DocSignServiceImpl implements DocSignService {
                 // and it's first private key entry from the PKCS12 store
                 // Return DSSPrivateKeyEntry privateKey *****
 
-                try (SignatureTokenConnection signingToken = new Pkcs12SignatureToken(CertificateUtils.generatePKCS12Keystore(certificate), null)) {
+                try (SignatureTokenConnection signingToken = new Pkcs12SignatureToken(CertificateUtils.generatePKCS12Keystore(certificate, "pwd"), new KeyStore.PasswordProtection("pwd".toCharArray()))) {
                         DSSPrivateKeyEntry privateKey = signingToken.getKeys().get(0);
 
                         // tag::demo[]
@@ -82,13 +83,9 @@ public class DocSignServiceImpl implements DocSignService {
 
                         // We invoke the padesService to sign the document with the signature value obtained in
                         // the previous step.
-                        DSSDocument signedDocument = service.signDocument(toSignDocument, parameters, signatureValue);
-
-
-                        return null;
+                        return service.signDocument(toSignDocument, parameters, signatureValue);
                 } catch (Exception e) {
                         throw new RuntimeException(e);
                 }
-
         }
 }

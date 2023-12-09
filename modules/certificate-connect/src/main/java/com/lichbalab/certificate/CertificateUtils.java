@@ -111,18 +111,18 @@ public class CertificateUtils {
         PrivateKeyInfo privateKeyInfo = PrivateKeyInfo.getInstance(privateKeyBytes);
 
         // Convert to PrivateKey
-        JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider("BC");
+        JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
         return converter.getPrivateKey(privateKeyInfo);
     }
 
-    public static byte[] generatePKCS12Keystore(Certificate certificate) throws Exception {
+    public static byte[] generatePKCS12Keystore(Certificate certificate, String password) throws Exception {
         KeyStore keyStore = KeyStore.getInstance("PKCS12");
         keyStore.load(null, null); // Initialize the keystore
         PrivateKey privateKey = convertBytesToPrivateKey(certificate.getPrivateKeyData());
 
 
         java.security.cert.Certificate[] certificateChain = getCertificateChain(certificate);
-        keyStore.setKeyEntry("alias", privateKey, null, certificateChain);
+        keyStore.setKeyEntry("alias", privateKey, password.toCharArray(), certificateChain);
 
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();

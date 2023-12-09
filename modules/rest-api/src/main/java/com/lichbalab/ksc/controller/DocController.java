@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/signatures")
-public class SignatureController {
+@RequestMapping("/docs")
+public class DocController {
 
-    @PostMapping("/create")
-    public ResponseEntity<MultipartFile> createSignature(@RequestParam("document") MultipartFile document, @RequestParam("alias") String certificateAlias) {
+    @PostMapping("/pdf/sign")
+    public ResponseEntity<MultipartFile> signPdf(@RequestParam("document") MultipartFile document, @RequestParam("alias") String certificateAlias) {
         return null;
     }
 }
