@@ -1,6 +1,9 @@
 package com.lichbalab.ksc.mapper;
 
+import java.io.IOException;
+
 import com.lichbalab.certificate.Certificate;
+import com.lichbalab.certificate.CertificateUtils;
 import com.lichbalab.ksc.dto.CertificateDto;
 
 public class CertificateDtoMapper {
@@ -17,7 +20,7 @@ public class CertificateDtoMapper {
         return certificateDto;
     }
 
-    public static Certificate dtoToCertificate(CertificateDto certificateDto) {
+    public static Certificate dtoToCertificate(CertificateDto certificateDto) throws IOException {
         Certificate certificate = new Certificate();
         certificate.setSerialNumber(certificateDto.getSerialNumber());
         certificate.setExpirationDate(certificateDto.getExpirationDate());
@@ -25,6 +28,7 @@ public class CertificateDtoMapper {
         certificate.setIssuer(certificateDto.getIssuer());
         certificate.setCertificateChainData(certificateDto.getCertificateChainData());
         certificate.setPrivateKeyData(certificateDto.getPrivateKeyData());
+        certificate.setCertChain(CertificateUtils.byteArrayToCertChain(certificate.getCertificateChainData()));
         return certificate;
     }
 }

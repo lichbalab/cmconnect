@@ -1,5 +1,6 @@
 package com.lichbalab.ksc.doc;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.cert.CertificateException;
@@ -15,6 +16,6 @@ public interface DocSignService {
      * @param certificate Certificate for signature.
      * @return Signed document
      */
-    DSSDocument signPdf(InputStream doc, Certificate certificate);
+    DSSDocument signPdf(InputStream doc, String certAlias) throws IOException;
 
 }

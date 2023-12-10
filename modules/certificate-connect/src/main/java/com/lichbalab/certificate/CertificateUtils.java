@@ -107,12 +107,16 @@ public class CertificateUtils {
         return certChain;
     }
 
-    public static PrivateKey convertBytesToPrivateKey(byte[] privateKeyBytes) throws PEMException {
+    public static PrivateKey convertBytesToPrivateKey(byte[] privateKeyBytes) {
         PrivateKeyInfo privateKeyInfo = PrivateKeyInfo.getInstance(privateKeyBytes);
 
         // Convert to PrivateKey
         JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
-        return converter.getPrivateKey(privateKeyInfo);
+        try {
+            return converter.getPrivateKey(privateKeyInfo);
+        } catch (PEMException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public static byte[] generatePKCS12Keystore(Certificate certificate, String password) throws Exception {

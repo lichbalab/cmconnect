@@ -7,16 +7,15 @@ import com.lichbalab.certificate.CertificateUtils;
 import eu.europa.esig.dss.enumerations.EncryptionAlgorithm;
 import eu.europa.esig.dss.model.x509.CertificateToken;
 import eu.europa.esig.dss.token.DSSPrivateKeyAccessEntry;
-import org.bouncycastle.openssl.PEMException;
 
-public class DssAccessEntry2L implements DSSPrivateKeyAccessEntry {
+public class DssAccessEntryLLab implements DSSPrivateKeyAccessEntry {
 
-    private final PrivateKey privateKey;
-    private final CertificateToken certificateToken;
-    private final CertificateToken[] certificateChain;
+    private final PrivateKey          privateKey;
+    private final CertificateToken    certificateToken;
+    private final CertificateToken[]  certificateChain;
     private final EncryptionAlgorithm encryptionAlgorithm;
 
-    public DssAccessEntry2L(Certificate certificate) throws PEMException {
+    public DssAccessEntryLLab(Certificate certificate) {
         certificateToken = SignUtil.getDssCertificateToken(certificate);
         certificateChain = SignUtil.getDssCertificateChain(certificate).toArray(new CertificateToken[0]);
         encryptionAlgorithm = EncryptionAlgorithm.forKey(certificateToken.getPublicKey());
@@ -25,21 +24,21 @@ public class DssAccessEntry2L implements DSSPrivateKeyAccessEntry {
 
     @Override
     public PrivateKey getPrivateKey() {
-        return null;
+        return privateKey;
     }
 
     @Override
     public CertificateToken getCertificate() {
-        return null;
+        return certificateToken;
     }
 
     @Override
     public CertificateToken[] getCertificateChain() {
-        return new CertificateToken[0];
+        return certificateChain;
     }
 
     @Override
     public EncryptionAlgorithm getEncryptionAlgorithm() {
-        return null;
+        return encryptionAlgorithm;
     }
 }

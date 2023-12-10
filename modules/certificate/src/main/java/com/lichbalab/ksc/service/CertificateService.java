@@ -6,16 +6,17 @@ import com.lichbalab.ksc.dto.CertificateDto;
 import com.lichbalab.ksc.mapper.CertificateMapper;
 import com.lichbalab.ksc.model.Certificate;
 import com.lichbalab.ksc.repository.CertificateRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CertificateService {
+    private final CertificateRepository certificateRepository;
+    private final CertificateMapper     mapper;
 
-    @Autowired
-    private CertificateRepository certificateRepository;
-    @Autowired
-    private CertificateMapper     mapper;
+    public CertificateService(CertificateRepository certificateRepository, CertificateMapper mapper) {
+        this.certificateRepository = certificateRepository;
+        this.mapper = mapper;
+    }
 
     public CertificateDto createCertificate(CertificateDto certificate) {
         Certificate dom = mapper.dtoToDom(certificate);
@@ -41,5 +42,9 @@ public class CertificateService {
 
     public void deleteCertificate(Long id) {
         certificateRepository.deleteById(id);
+    }
+
+    public CertificateDto getCertByAlias(String alias) {
+        return mapper.domToDto(certificateRepository.getCertByAlias(alias));
     }
 }
