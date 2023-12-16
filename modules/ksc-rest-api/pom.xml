@@ -9,18 +9,18 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>rest-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>rest-api</name>
-	<description>Key Store Connect REST API</description>
+	<artifactId>ksc-rest-api</artifactId>
+	<name>KSC Rest API</name>
+
 	<properties>
 		<java.version>21</java.version>
 	</properties>
+
 	<dependencies>
 
 		<dependency>
 			<groupId>com.lichbalab.ksc</groupId>
-			<artifactId>certificate</artifactId>
+			<artifactId>ksc-certificate</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -32,7 +32,7 @@
 
 		<dependency>
 			<groupId>com.lichbalab.ksc</groupId>
-			<artifactId>ui</artifactId>
+			<artifactId>ksc-ui</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

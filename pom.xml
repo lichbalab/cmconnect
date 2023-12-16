@@ -39,10 +39,10 @@
     </properties>
 
     <modules>
-        <module>modules/rest-api</module>
-        <module>modules/certificate-connect</module>
-        <module>modules/certificate</module>
-        <module>modules/ui</module>
+        <module>modules/ksc-rest-api</module>
+        <module>modules/ksc-certificate-connect</module>
+        <module>modules/ksc-certificate</module>
+        <module>modules/ksc-ui</module>
         <module>modules/ksc-document</module>
     </modules>
 

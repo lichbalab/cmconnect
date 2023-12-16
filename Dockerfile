@@ -5,9 +5,9 @@ FROM eclipse-temurin:21-alpine
 WORKDIR /ksc
 
 # Copy the entire project source
-COPY modules/rest-api/target/rest-api-*.jar /ksc/rest-api.jar
+COPY modules/ksc-rest-api/target/ksc-rest-api-*.jar /ksc/ksc-rest-api.jar
 
 # Specify the entry point for the application
 # ENTRYPOINT ["java","-jar","/ksc/rest-api.jar"]
 # Debug mode
-ENTRYPOINT ["java","-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-jar","/ksc/rest-api.jar"]
+ENTRYPOINT ["java","-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-jar","/ksc/ksc-rest-api.jar"]

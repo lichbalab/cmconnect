@@ -11,6 +11,8 @@
     </parent>
 
     <artifactId>ksc-document</artifactId>
+    <name>KSC Document</name>
+
 
     <properties>
         <java.version>21</java.version>
@@ -28,13 +30,13 @@
 
         <dependency>
             <groupId>com.lichbalab.ksc</groupId>
-            <artifactId>certificate-connect</artifactId>
+            <artifactId>ksc-certificate-connect</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.lichbalab.ksc</groupId>
-            <artifactId>certificate</artifactId>
+            <artifactId>ksc-certificate</artifactId>
             <version>${project.version}</version>
         </dependency>
 

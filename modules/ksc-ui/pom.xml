@@ -10,7 +10,8 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>ui</artifactId>
+    <artifactId>ksc-ui</artifactId>
+    <name>KSC UI</name>
 
     <properties>
         <node.version>v16.13.0</node.version>

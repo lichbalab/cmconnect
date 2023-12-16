@@ -9,11 +9,8 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>certificate-connect</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>certificate-connect</name>
-    <description>Certificate Connect</description>
-    <packaging>jar</packaging>
+    <artifactId>ksc-certificate-connect</artifactId>
+    <name>KSC Certificate Connect</name>
 
     <properties>
         <java.version>21</java.version>
