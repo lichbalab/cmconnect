@@ -6,6 +6,7 @@ services:
     image: lichbalab:ksc-0.0.1
     ports:
       - "8080:8080"
+      - "5005:5005" #Debug port
     restart: always
     environment:
       DB_HOST: postgres

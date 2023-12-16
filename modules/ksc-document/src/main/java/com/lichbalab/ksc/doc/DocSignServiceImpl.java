@@ -2,12 +2,8 @@ package com.lichbalab.ksc.doc;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Serial;
-import java.security.KeyStore;
 
 import com.lichbalab.certificate.Certificate;
-import com.lichbalab.certificate.CertificateUtils;
 import com.lichbalab.ksc.mapper.CertificateDtoMapper;
 import com.lichbalab.ksc.service.CertificateService;
 import eu.europa.esig.dss.enumerations.DigestAlgorithm;
@@ -20,10 +16,8 @@ import eu.europa.esig.dss.model.ToBeSigned;
 import eu.europa.esig.dss.pades.PAdESSignatureParameters;
 import eu.europa.esig.dss.pades.signature.PAdESService;
 import eu.europa.esig.dss.token.DSSPrivateKeyEntry;
-import eu.europa.esig.dss.token.Pkcs12SignatureToken;
 import eu.europa.esig.dss.token.SignatureTokenConnection;
 import eu.europa.esig.dss.validation.CommonCertificateVerifier;
-import org.bouncycastle.openssl.PEMException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +27,8 @@ public class DocSignServiceImpl implements DocSignService {
 
     private final CertificateService certificateService;
 
+
+    @Autowired
     public DocSignServiceImpl (CertificateService certificateService) {
         this.certificateService = certificateService;
     }

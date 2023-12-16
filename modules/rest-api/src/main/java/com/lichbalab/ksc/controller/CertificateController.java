@@ -27,8 +27,12 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/certificates")
 public class CertificateController {
 
+    private final CertificateService certificateService;
+
     @Autowired
-    private CertificateService certificateService;
+    public CertificateController(CertificateService certificateService) {
+        this.certificateService = certificateService;
+    }
 
     @PostMapping
     public ResponseEntity<CertificateDto> createCertificate(@RequestBody CertificateDto certificate) {
