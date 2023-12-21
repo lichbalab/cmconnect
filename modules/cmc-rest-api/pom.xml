@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.lichbalab.ksc</groupId>
-		<artifactId>ksc</artifactId>
+		<artifactId>cmc</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>ksc-rest-api</artifactId>
-	<name>KSC Rest API</name>
+	<artifactId>cmc-rest-api</artifactId>
+	<name>CMC Rest API</name>
 
 	<properties>
 		<java.version>21</java.version>
@@ -20,19 +20,19 @@
 
 		<dependency>
 			<groupId>com.lichbalab.ksc</groupId>
-			<artifactId>ksc-certificate</artifactId>
+			<artifactId>cmc-certificate</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.lichbalab.ksc</groupId>
-			<artifactId>ksc-document</artifactId>
+			<artifactId>cmc-document</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.lichbalab.ksc</groupId>
-			<artifactId>ksc-ui</artifactId>
+			<artifactId>cmc-ui</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

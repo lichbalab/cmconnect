@@ -13,11 +13,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.lichbalab.ksc</groupId>
-    <artifactId>ksc</artifactId>
+    <artifactId>cmc</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Key Store Connect</name>
+    <name>Certificate Manager Connect</name>
     <url>https://github.com/lichbalab/ksconnect</url>
     <developers>
         <developer>
@@ -39,11 +39,11 @@
     </properties>
 
     <modules>
-        <module>modules/ksc-rest-api</module>
-        <module>modules/ksc-certificate-connect</module>
-        <module>modules/ksc-certificate</module>
-        <module>modules/ksc-ui</module>
-        <module>modules/ksc-document</module>
+        <module>modules/cmc-rest-api</module>
+        <module>modules/cmc-certificate-connect</module>
+        <module>modules/cmc-certificate</module>
+        <module>modules/cmc-ui</module>
+        <module>modules/cmc-document</module>
     </modules>
 
     <dependencyManagement>

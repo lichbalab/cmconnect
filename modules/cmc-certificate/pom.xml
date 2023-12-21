@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.lichbalab.ksc</groupId>
-        <artifactId>ksc</artifactId>
+        <artifactId>cmc</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>ksc-certificate</artifactId>
-    <name>KSC Certificate</name>
+    <artifactId>cmc-certificate</artifactId>
+    <name>CMC Certificate</name>
 
     <properties>
         <java.version>21</java.version>
@@ -26,7 +26,7 @@
 
         <dependency>
             <groupId>com.lichbalab.ksc</groupId>
-            <artifactId>ksc-certificate-connect</artifactId>
+            <artifactId>cmc-certificate-connect</artifactId>
             <version>${project.version}</version>
         </dependency>
 

@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.lichbalab.ksc</groupId>
-        <artifactId>ksc</artifactId>
+        <artifactId>cmc</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>ksc-ui</artifactId>
-    <name>KSC UI</name>
+    <artifactId>cmc-ui</artifactId>
+    <name>CMC UI</name>
 
     <properties>
         <node.version>v16.13.0</node.version>
