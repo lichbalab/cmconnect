@@ -19,7 +19,7 @@ This command cleans any compiled files in your project, ensuring a fresh build f
 ## How to Build Docker Image
 If you prefer Docker, you can build an image using:
 ```bash
-docker build -t lichbalab:ksc-0.0.1 .
+docker build -t lichbalab:cmc-0.0.1 .
 ```
 This command builds a Docker image tagged `lichbalab:ksc-0.0.1`.
 

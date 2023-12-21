@@ -44,6 +44,7 @@
         <module>modules/cmc-certificate</module>
         <module>modules/cmc-ui</module>
         <module>modules/cmc-document</module>
+        <module>modules/cmc-shared</module>
     </modules>
 
     <dependencyManagement>

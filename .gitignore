@@ -37,3 +37,8 @@ replay_pid*
 /modules/cmc-ui/src/main/ui/node/
 /modules/cmc-ui/src/main/ui/node_modules/
 /modules/cmc-document/cmc-document.iml
+/modules/cmc-certificate/cmc-certificate.iml
+/modules/cmc-rest-api/cmc-rest-api.iml
+/modules/cmc-ui/cmc-ui.iml
+/modules/cmc-shared/target/
+/modules/cmc-certificate-connect/cmc-certificate-connect.iml
