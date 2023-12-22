@@ -42,3 +42,4 @@ replay_pid*
 /modules/cmc-ui/cmc-ui.iml
 /modules/cmc-shared/target/
 /modules/cmc-certificate-connect/cmc-certificate-connect.iml
+/modules/cmc-shared/cmc-shared.iml
