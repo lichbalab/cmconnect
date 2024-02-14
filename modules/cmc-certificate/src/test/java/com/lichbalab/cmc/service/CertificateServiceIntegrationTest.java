@@ -18,7 +18,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
 @DataJpaTest(properties = {"spring.test.database.replace=none"})
-@ComponentScan(basePackages = "com.lichbalab.ksc")
+@ComponentScan(basePackages = "com.lichbalab.cmc")
 public class CertificateServiceIntegrationTest {
     private final static List<CertificateDto> CERTS = CertificateTestHelper.CERTS_DTO;
 

@@ -12,7 +12,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.lichbalab.ksc</groupId>
+    <groupId>com.lichbalab.cmc</groupId>
     <artifactId>cmc</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -88,6 +88,12 @@
                 <artifactId>postgresql</artifactId> <!-- or the appropriate database module -->
                 <version>${testcontainers.version}</version>
                 <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.5.13</version> <!-- Check for the latest version -->
             </dependency>
 
         </dependencies>

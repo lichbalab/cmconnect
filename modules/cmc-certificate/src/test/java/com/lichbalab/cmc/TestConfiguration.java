@@ -14,7 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(classes = {CertificateService.class})
 @DataJpaTest(properties = { "spring.test.database.replace=none"})
 @EnableAutoConfiguration
-@ComponentScan(basePackages = "com.lichbalab.ksc")
+@ComponentScan(basePackages = "com.lichbalab.cmc")
 class TestConfiguration {
 
     @Autowired
