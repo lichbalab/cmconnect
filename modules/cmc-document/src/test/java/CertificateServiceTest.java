@@ -1,7 +1,7 @@
-import com.lichbalab.ksc.dto.CertificateDto;
-import com.lichbalab.ksc.mapper.CertificateMapper;
-import com.lichbalab.ksc.repository.CertificateRepository;
-import com.lichbalab.ksc.service.CertificateService;
+import com.lichbalab.cmc.dto.CertificateDto;
+import com.lichbalab.cmc.mapper.CertificateMapper;
+import com.lichbalab.cmc.repository.CertificateRepository;
+import com.lichbalab.cmc.service.CertificateService;
 
 public class CertificateServiceTest extends CertificateService {
 

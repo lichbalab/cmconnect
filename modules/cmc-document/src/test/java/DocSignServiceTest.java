@@ -6,9 +6,9 @@ import java.util.Collection;
 
 import com.lichbalab.certificate.Certificate;
 import com.lichbalab.certificate.CertificateUtils;
-import com.lichbalab.ksc.doc.DocSignService;
-import com.lichbalab.ksc.doc.DocSignServiceImpl;
-import com.lichbalab.ksc.mapper.CertificateDtoMapper;
+import com.lichbalab.cmc.doc.DocSignService;
+import com.lichbalab.cmc.doc.DocSignServiceImpl;
+import com.lichbalab.cmc.mapper.CertificateDtoMapper;
 import eu.europa.esig.dss.diagnostic.DiagnosticData;
 import eu.europa.esig.dss.model.DSSDocument;
 import eu.europa.esig.dss.pdfa.PDFAValidationResult;
