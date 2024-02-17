@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.lichbalab.certificate.Certificate;
 import com.lichbalab.certificate.CertificateUtils;
-import com.lichbalab.cmc.dto.CertificateDto;
+import com.lichbalab.certificate.dto.CertificateDto;
 import com.lichbalab.cmc.mapper.CertificateDtoMapper;
 import com.lichbalab.cmc.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;

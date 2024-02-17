@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.lichbalab.certificate.CertificateUtils;
-import com.lichbalab.cmc.dto.CertificateDto;
+import com.lichbalab.certificate.dto.CertificateDto;
 import com.lichbalab.cmc.mapper.CertificateDtoMapper;
 import com.lichbalab.cmc.model.Certificate;
 import com.lichbalab.cmc.service.CertificateServiceIntegrationTest;

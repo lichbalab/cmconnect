@@ -1,4 +1,4 @@
-package com.lichbalab.cmc.dto;
+package com.lichbalab.certificate.dto;
 
 import java.math.BigInteger;
 import java.util.Date;

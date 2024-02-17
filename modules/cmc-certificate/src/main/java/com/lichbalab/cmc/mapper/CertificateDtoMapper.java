@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.lichbalab.certificate.Certificate;
 import com.lichbalab.certificate.CertificateUtils;
-import com.lichbalab.cmc.dto.CertificateDto;
+import com.lichbalab.certificate.dto.CertificateDto;
 
 public class CertificateDtoMapper {
 

@@ -3,7 +3,7 @@ package com.lichbalab.cmc.service;
 import java.util.List;
 
 import com.lichbalab.cmc.CertificateTestHelper;
-import com.lichbalab.cmc.dto.CertificateDto;
+import com.lichbalab.certificate.dto.CertificateDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

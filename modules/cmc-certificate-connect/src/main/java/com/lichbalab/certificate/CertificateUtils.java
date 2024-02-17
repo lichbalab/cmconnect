@@ -11,6 +11,8 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lichbalab.certificate.dto.CertificateDto;
+import com.lichbalab.cmc.core.exception.CmcRuntimeException;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
@@ -69,6 +71,21 @@ public class CertificateUtils {
     }
 
     /**
+     * Builds @{@link Certificate} instance from @{@link CertificateDto}.
+     */
+    public static Certificate buildFromDto(CertificateDto dto) {
+        Certificate certificate = new Certificate();
+        certificate.setCertificateChainData(dto.getCertificateChainData());
+        certificate.setPrivateKeyData(dto.getPrivateKeyData());
+        certificate.setExpirationDate(dto.getExpirationDate());
+        certificate.setSubject(dto.getSubject());
+        certificate.setIssuer(dto.getIssuer());
+        certificate.setSerialNumber(dto.getSerialNumber());
+        certificate.setCertChain(CertificateUtils.byteArrayToCertChain(dto.getCertificateChainData()));
+        return certificate;
+    }
+
+    /**
      * Converts certificate chain into byte array.
      *
      * @param certChain Certificate chain, list of @{@link X509CertificateHolder}
@@ -92,7 +109,7 @@ public class CertificateUtils {
      * @param certChainData Byte array
      * @return List of @{@link X509CertificateHolder}
      */
-    public static List<X509CertificateHolder> byteArrayToCertChain(byte[] certChainData) throws IOException {
+    public static List<X509CertificateHolder> byteArrayToCertChain(byte[] certChainData) {
         List<X509CertificateHolder> certChain = new ArrayList<>();
 
         ByteArrayInputStream bais = new ByteArrayInputStream(certChainData);
@@ -102,6 +119,8 @@ public class CertificateUtils {
                 X509CertificateHolder certHolder = new X509CertificateHolder(seq.getEncoded());
                 certChain.add(certHolder);
             }
+        } catch (IOException ex) {
+            throw new CmcRuntimeException("failed to build X509 certificate", ex);
         }
 
         return certChain;

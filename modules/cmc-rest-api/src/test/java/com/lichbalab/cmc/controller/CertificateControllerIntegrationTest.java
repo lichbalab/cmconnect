@@ -7,12 +7,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Stream;
 
 import com.lichbalab.certificate.CertificateUtils;
-import com.lichbalab.cmc.dto.CertificateDto;
+import com.lichbalab.certificate.dto.CertificateDto;
 import com.lichbalab.cmc.service.CertificateService;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;

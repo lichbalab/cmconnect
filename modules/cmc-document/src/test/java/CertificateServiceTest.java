@@ -1,4 +1,4 @@
-import com.lichbalab.cmc.dto.CertificateDto;
+import com.lichbalab.certificate.dto.CertificateDto;
 import com.lichbalab.cmc.mapper.CertificateMapper;
 import com.lichbalab.cmc.repository.CertificateRepository;
 import com.lichbalab.cmc.service.CertificateService;

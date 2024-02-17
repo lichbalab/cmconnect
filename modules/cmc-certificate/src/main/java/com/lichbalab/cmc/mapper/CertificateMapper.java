@@ -1,6 +1,6 @@
 package com.lichbalab.cmc.mapper;
 
-import com.lichbalab.cmc.dto.CertificateDto;
+import com.lichbalab.certificate.dto.CertificateDto;
 import com.lichbalab.cmc.model.Certificate;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
