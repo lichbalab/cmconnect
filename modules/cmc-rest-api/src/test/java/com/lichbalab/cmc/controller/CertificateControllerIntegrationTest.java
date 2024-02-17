@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import com.lichbalab.certificate.CertificateUtils;
@@ -59,6 +61,7 @@ public class CertificateControllerIntegrationTest {
     public void setUp() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = port;
+        cleanCertificates();
     }
 
     @Test
@@ -75,10 +78,11 @@ public class CertificateControllerIntegrationTest {
         Assertions.assertEquals(201, response.statusCode());  // Assuming 201 is the HTTP status for successful creation
         // ... any other assertions based on the expected response ...    }
     }
+
     @Test
     void testUploadCertificateFromFile() {
         // Assuming you have a file to upload, adjust accordingly
-        File   fileToUpload = new File(CERT_PATH.get(0).toUri());
+        File   fileToUpload = new File(CERT_PATH.getFirst().toUri());
         String alias        = "testAlias";
 
         Response response = given()
@@ -125,10 +129,10 @@ public class CertificateControllerIntegrationTest {
 
             Assertions.assertEquals(200, response.statusCode());
         }
-   }
+    }
 
     @Test
-     void testDeleteCertificate() {
+    void testDeleteCertificate() {
         List<CertificateDto> createdCerts = CERTS.stream().map(certificateService::createCertificate).toList();
         for (CertificateDto cert : createdCerts) {
             Response response = given()
@@ -139,6 +143,30 @@ public class CertificateControllerIntegrationTest {
         }
     }
 
+    @Test
+    void testGetCertificateByAlias() {
+        List<CertificateDto> createdCerts = CERTS.stream().map(certificateService::createCertificate).toList();
+        for (CertificateDto cert : createdCerts) {
+            Response response = given()
+                     .when()
+                     .get("/certificates/alias/" + cert.getAlias());
+
+            Assertions.assertEquals(200, response.statusCode());
+        }
+    }
+
+    @Test
+    void testGetCertificateByAliasNotFound() {
+        String alias = "nonExistingAlias";
+
+        Response response = given()
+                 .when()
+                 .get("/certificates/alias/" + alias);
+
+        Assertions.assertEquals(404, response.statusCode());
+    }
+
+
     private static List<Path> getCertPaths() {
         try (Stream<Path> streamPath = Files.list(Paths.get(CertificateControllerIntegrationTest.class.getResource("/certs").toURI()))) {
             return streamPath.toList();
@@ -148,7 +176,7 @@ public class CertificateControllerIntegrationTest {
     }
 
     private static CertificateDto createTestCertificate(Path path) {
-        com.lichbalab.certificate.Certificate certPem = null;
+        com.lichbalab.certificate.Certificate certPem;
         try {
             certPem = CertificateUtils.buildFromPEM(new FileReader(path.toFile()));
         } catch (IOException ex) {
@@ -163,7 +191,15 @@ public class CertificateControllerIntegrationTest {
         testCertificate.setIssuer(certPem.getIssuer());
         testCertificate.setCertificateChainData(certPem.getCertificateChainData());
         testCertificate.setPrivateKeyData(certPem.getPrivateKeyData());
+        testCertificate.setAlias(UUID.randomUUID().toString());
 
         return testCertificate;
+    }
+
+    private void cleanCertificates() {
+        List<CertificateDto> certs = certificateService.getAllCertificates();
+        for (CertificateDto cert : certs) {
+            certificateService.deleteCertificate(cert.getId());
+        }
     }
 }

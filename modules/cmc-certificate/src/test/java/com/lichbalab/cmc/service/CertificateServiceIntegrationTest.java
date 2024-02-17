@@ -59,7 +59,7 @@ public class CertificateServiceIntegrationTest {
 
     @Test
     void testGetCertificateById() {
-        CertificateDto created   = certificateService.createCertificate(CERTS.get(0));
+        CertificateDto created   = certificateService.createCertificate(CERTS.getFirst());
         CertificateDto retrieved = certificateService.getCertificateById(created.getId());
 
         Assertions.assertEquals(created, retrieved, "Wrong certificate found by id.");
@@ -67,7 +67,7 @@ public class CertificateServiceIntegrationTest {
 
     @Test
     void testUpdateCertificate() throws Exception {
-        CertificateDto created = certificateService.createCertificate(CERTS.get(0));
+        CertificateDto created = certificateService.createCertificate(CERTS.getFirst());
 
         CertificateDto updated = certificateService.updateCertificate(created.getId(), created);
 
@@ -76,7 +76,7 @@ public class CertificateServiceIntegrationTest {
 
     @Test
     void testDeleteCertificate() {
-        CertificateDto created = certificateService.createCertificate(CERTS.get(0));
+        CertificateDto created = certificateService.createCertificate(CERTS.getFirst());
         certificateService.deleteCertificate(created.getId());
 
         CertificateDto retrieved = certificateService.getCertificateById(created.getId());

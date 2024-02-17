@@ -42,7 +42,7 @@ public class CertificateController {
     @PostMapping("/upload")
     public ResponseEntity<CertificateDto> createCertificateFromFile(@RequestParam("file") MultipartFile file, @RequestParam("alias") String alias) throws IOException {
         // Convert the file content to a CertificateDto (Placeholder, will need more details on this conversion)
-        Certificate certificate = CertificateUtils.buildFromPEM(new InputStreamReader(file.getInputStream()));
+        Certificate    certificate    = CertificateUtils.buildFromPEM(new InputStreamReader(file.getInputStream()));
         CertificateDto certificateDto = CertificateDtoMapper.certificateToDto(certificate, alias);
 
         // Use the certificateService to create the certificate
@@ -60,10 +60,10 @@ public class CertificateController {
     @GetMapping("/{certificateId}")
     public ResponseEntity<CertificateDto> getCertificateById(@PathVariable Long certificateId) {
         CertificateDto certificate = certificateService.getCertificateById(certificateId);
-        if (certificate != null) {
-            return new ResponseEntity<>(certificate, HttpStatus.OK);
+        if (certificate == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(certificate, HttpStatus.OK);
     }
 
     @PutMapping("/{certificateId}")
@@ -75,9 +75,24 @@ public class CertificateController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Delete a certificate by ID.
+     *
+     * @param certificateId the ID of the certificate to delete
+     * @return a ResponseEntity with a status of OK
+     */
     @DeleteMapping("/{certificateId}")
     public ResponseEntity<Void> deleteCertificate(@PathVariable Long certificateId) {
         certificateService.deleteCertificate(certificateId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/alias/{alias}")
+    public ResponseEntity<CertificateDto> getCertificateByAlias(@PathVariable String alias) {
+        CertificateDto cert = certificateService.getCertByAlias(alias);
+        if (cert == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(cert, HttpStatus.OK);
     }
 }
