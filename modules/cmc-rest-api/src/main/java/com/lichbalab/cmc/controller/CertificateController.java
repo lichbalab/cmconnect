@@ -7,6 +7,8 @@ import java.util.List;
 import com.lichbalab.certificate.Certificate;
 import com.lichbalab.certificate.CertificateUtils;
 import com.lichbalab.certificate.dto.CertificateDto;
+import com.lichbalab.cmc.core.CmcException;
+import com.lichbalab.cmc.core.ErrorCode;
 import com.lichbalab.cmc.mapper.CertificateDtoMapper;
 import com.lichbalab.cmc.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +93,7 @@ public class CertificateController {
     public ResponseEntity<CertificateDto> getCertificateByAlias(@PathVariable String alias) {
         CertificateDto cert = certificateService.getCertByAlias(alias);
         if (cert == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new CmcException(ErrorCode.CERTIFICATE_NOT_FOUND, new Object[]{alias});
         }
         return new ResponseEntity<>(cert, HttpStatus.OK);
     }

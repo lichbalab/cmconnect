@@ -9,7 +9,7 @@ public class CmcClientFactory {
         // Manually create and configure WebClient or other Spring components here
         WebClient webClient = WebClient.builder()
                  .baseUrl(config.getBaseUrl())
-                 // Configure SSL, etc. based on config
+                 .filter(ErrorHandler.handleError())
                  .build();
 
         return new CmcClientImpl(webClient);
