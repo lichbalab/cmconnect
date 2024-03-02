@@ -14,10 +14,10 @@
 
     <groupId>com.lichbalab.cmc</groupId>
     <artifactId>cmc</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>2024.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Certificate Manager Connect</name>
+    <name>Certificate Manager Connect (CMC)</name>
     <url>https://github.com/lichbalab/ksconnect</url>
     <developers>
         <developer>

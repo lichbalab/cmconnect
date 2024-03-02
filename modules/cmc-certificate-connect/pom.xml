@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.lichbalab.cmc</groupId>
         <artifactId>cmc</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>2024.1-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 

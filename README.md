@@ -42,7 +42,7 @@ This starts the Docker container in detached mode.
 ## How to Start
 ### Directly via JAR:
 ```bash
-java -jar target/ksc-rest-api-0.0.1-SNAPSHOT.jar
+java -jar target/ksc-rest-api-2024.1-SNAPSHOT.jar
 ```
 ### Via Maven:
 ```bash
@@ -52,7 +52,7 @@ mvn spring-boot:run
 ### Debug Mode:
 Start in debug mode to enable breakpoints and other debugging features:
 ```bash
-java -jar -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 target/ksc-rest-api-0.0.1-SNAPSHOT.jar
+java -jar -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 target/ksc-rest-api-2024.1-SNAPSHOT.jar
 ```
 
 ## Usage
