@@ -41,7 +41,7 @@ class CmcClientTest {
 
         POSTGRES_CONTAINER.start();
 
-        CMC_API = new GenericContainer<>("lichbalab:cmc-0.0.1")
+        CMC_API = new GenericContainer<>("lichbalab:cmc-2024.1")
                  .withExposedPorts(API_EXPOSED_POPRT)
                  .withNetwork(network)
                  .withLogConsumer(new Slf4jLogConsumer(logger))
@@ -75,6 +75,6 @@ class CmcClientTest {
             exception = ex;
         }
         Assertions.assertNotNull(exception, CmcClientException.class.getSimpleName() + " is expected, but actual exceptions is " + exception);
-        Assertions.assertTrue(exception.getMessage().contains("No certificate found with alias=" + alias), "Wrong error message.");
+        Assertions.assertTrue(exception.getMessage().contains("No certificates found with alias=" + alias), "Wrong error message.");
     }
 }
