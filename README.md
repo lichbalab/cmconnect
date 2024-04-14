@@ -57,6 +57,7 @@ java -jar -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 
 
 ## Usage
 Once running, KeyStoreConnect allows you to...
+http://localhost:8080
 
 [TBD]
 
