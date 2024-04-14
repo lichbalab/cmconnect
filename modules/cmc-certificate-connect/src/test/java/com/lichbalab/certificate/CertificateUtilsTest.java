@@ -20,7 +20,7 @@ class CertificateUtilsTest {
         for (Certificate cert : certs) {
             List<X509CertificateHolder> x509Certs = CertificateUtils.byteArrayToCertChain(cert.getCertificateChainData());
             Assertions.assertFalse(x509Certs.isEmpty(), "Certificate is not deserialized correctly from byte array.");
-            Assertions.assertEquals(cert.getSerialNumber(), x509Certs.get(0).getSerialNumber(), "Certificate is not deserialized correctly from byte array.");
+            Assertions.assertEquals(cert.getSerialNumber(), String.valueOf(x509Certs.get(0).getSerialNumber()), "Certificate is not deserialized correctly from byte array.");
         }
     }
 

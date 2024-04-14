@@ -24,8 +24,8 @@ public class Certificate {
 
     @Column(name = "alias")
     private String     alias;
-    @Column(name = "serial_number", precision = 38)
-    private BigInteger serialNumber;
+    @Column(name = "serial_number")
+    private String serialNumber;
 
     @Column(name = "expiration_date")
     private Date expirationDate;
@@ -57,11 +57,11 @@ public class Certificate {
         return alias;
     }
 
-    public BigInteger getSerialNumber() {
+    public String getSerialNumber() {
         return serialNumber;
     }
 
-    public void setSerialNumber(BigInteger serialNumber) {
+    public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
     }
 

@@ -13,7 +13,7 @@ public class Certificate {
     private String                      subject;
     private String                      issuer;
     private Date                        expirationDate;
-    private BigInteger                  serialNumber;
+    private String serialNumber;
 
     public byte[] getCertificateChainData() {
         return certificateChainData;
@@ -55,11 +55,11 @@ public class Certificate {
         this.expirationDate = expirationDate;
     }
 
-    public BigInteger getSerialNumber() {
+    public String getSerialNumber() {
         return serialNumber;
     }
 
-    public void setSerialNumber(BigInteger serialNumber) {
+    public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
     }
 

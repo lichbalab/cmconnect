@@ -8,14 +8,14 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class CertificateDto {
 
-    private Long       id;
-    private String     alias;
-    private BigInteger serialNumber;
-    private Date       expirationDate;
-    private String     subject;
-    private String     issuer;
-    private byte[]     certificateChainData;
-    private byte[]     privateKeyData;
+    private Long id;
+    private String alias;
+    private String serialNumber;
+    private Date expirationDate;
+    private String subject;
+    private String issuer;
+    private byte[] certificateChainData;
+    private byte[] privateKeyData;
 
     public Long getId() {
         return id;
@@ -33,11 +33,11 @@ public class CertificateDto {
         this.alias = alias;
     }
 
-    public BigInteger getSerialNumber() {
+    public String getSerialNumber() {
         return serialNumber;
     }
 
-    public void setSerialNumber(BigInteger serialNumber) {
+    public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
     }
 

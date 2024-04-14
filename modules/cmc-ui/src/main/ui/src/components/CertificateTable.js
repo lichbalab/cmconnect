@@ -74,7 +74,7 @@ const CertificateTable = () => {
                       <TableCell>{row.subject}</TableCell>
                       <TableCell>{row.issuer}</TableCell>
                       <TableCell>{row.serialNumber}</TableCell>
-                      <TableCell>{row.expirationTimestamp}</TableCell>
+                      <TableCell>{row.expirationDate}</TableCell>
                       <TableCell>
                         <Button
                           variant="contained"

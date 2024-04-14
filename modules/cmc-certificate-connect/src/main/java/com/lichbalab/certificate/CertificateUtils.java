@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Reader;
+import java.math.BigInteger;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.CertificateException;
@@ -64,7 +65,7 @@ public class CertificateUtils {
         certificateObj.setExpirationDate(cert.getNotAfter());
         certificateObj.setSubject(cert.getSubject().toString());
         certificateObj.setIssuer(cert.getIssuer().toString());
-        certificateObj.setSerialNumber(cert.getSerialNumber());
+        certificateObj.setSerialNumber(String.valueOf(cert.getSerialNumber()));
         certificateObj.setCertChain(certChain);
 
         return certificateObj;
