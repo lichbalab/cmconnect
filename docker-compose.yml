@@ -2,8 +2,8 @@ version: '3'
 
 services:
   # Application service for config-rest-api
-  ksc:
-    image: lichbalab:cmc-0.0.1
+  cmc:
+    image: lichbalab:cmc-2024.1
     ports:
       - "8080:8080"
       - "5005:5005" #Debug port
