@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { getCertificates, deleteCertificate, uploadCertificate } from '../services/api';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField } from '@mui/material';
+import { Link } from 'react-router-dom';
+
 
 const CertificateTable = () => {
     const [certificates, setCertificates] = useState([]);
@@ -82,6 +84,14 @@ const CertificateTable = () => {
                           onClick={() => handleDelete(row.id)}
                         >
                           Remove
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            component={Link}
+                            to={`/certificate/${row.id}`}
+                        >
+                            View Details
                         </Button>
                       </TableCell>
                     </TableRow>

@@ -11,6 +11,9 @@ export const deleteCertificate = (id) => {
     return axios.delete(`${API_BASE_URL}/certificates/${id}`);
 };
 
+export const getCertificate = (id) => {
+    return axios.get(`${API_BASE_URL}/certificates/${id}`);
+};
 
 export const uploadCertificate = (file, alias) => {
     try {
