@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { getCertificates, deleteCertificate, uploadCertificate } from '../services/api';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const CertificateTable = () => {
@@ -30,6 +30,12 @@ const CertificateTable = () => {
 
     const handleAliasChange = (event) => {
         setAlias(event.target.value);
+    };
+
+    const navigate = useNavigate();
+
+    const handleRowDoubleClick = (id) => {
+        navigate(`/certificate/${id}`);
     };
 
     const uploadFile = async () => {
@@ -71,7 +77,7 @@ const CertificateTable = () => {
                 </TableHead>
                 <TableBody>
                   {certificates.map((row) => (
-                    <TableRow key={row.alias}>
+                    <TableRow key={row.alias} onDoubleClick={() => handleRowDoubleClick(row.id)}>
                       <TableCell>{row.alias}</TableCell>
                       <TableCell>{row.subject}</TableCell>
                       <TableCell>{row.issuer}</TableCell>
