@@ -7,6 +7,7 @@ export default function CertificateDialog ({isFormVisible, setFormVisible, onDia
   const [form] = Form.useForm();
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileName, setSelectedFileName] = useState('');
+  const [fileList, setFileList] = useState([]);
 
   const handleFileUpload = (file) => {
     setSelectedFile(file);
@@ -15,9 +16,10 @@ export default function CertificateDialog ({isFormVisible, setFormVisible, onDia
   };
 
   const uploadFile = async () => {
-    const values = form.getFieldsValue();
+  try {
+    const values = await form.validateFields();
     if (!selectedFile || values.alias.trim() === '') {
-      alert("Please select a file and enter an alias!");
+      //alert("Please select a file and enter an alias!");
       return false;
     }
 
@@ -26,15 +28,32 @@ export default function CertificateDialog ({isFormVisible, setFormVisible, onDia
       form.resetFields();
       setFormVisible(false);
       onDialogClose();
+      setFileList([]);
+      setSelectedFile(null);
       return true;
     } catch (error) {
       console.error("Error uploading file:", error);
     }
+  } catch (errorInfo) {
+    console.error('Failed:', errorInfo);
+  };
+}
+
+  const normFile = e => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
   };
 
   return (
   <Modal visible={isFormVisible}
-    onCancel={() => setFormVisible(false)}
+    onCancel={() => {
+    setFormVisible(false);
+    form.resetFields();
+    setFileList([]);
+    setSelectedFile(null);
+    }}
     onOk={uploadFile}
     width={500} title="Add Certificate"
     >
@@ -46,9 +65,25 @@ export default function CertificateDialog ({isFormVisible, setFormVisible, onDia
         >
           <Input />
         </Form.Item>
-        <Upload beforeUpload={handleFileUpload} showUploadList={true}>
+        <Form.Item
+          name="upload"
+          label="Upload"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+          rules={[{ required: true, message: 'Please upload a file!' }]}
+        >
+        <Upload
+        accept=".pem"
+        beforeUpload={handleFileUpload}
+        showUploadList={true}
+         fileList={fileList} // Pass fileList as a prop to Upload
+          onChange={({ fileList: newFileList }) => {
+            setFileList(newFileList); // Update fileList in the onChange handler
+          }}
+        >
           <Button icon={<UploadOutlined />}>Upload file</Button>
         </Upload>
+        </Form.Item>
       </Form>
     </Modal>
   );
