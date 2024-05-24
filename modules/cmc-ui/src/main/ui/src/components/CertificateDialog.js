@@ -3,7 +3,7 @@ import { Modal, Button, Form, Input, Upload } from 'antd';
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import { uploadCertificate } from '../services/api';
 
-export default function CertificateDialog ({isFormVisible, setFormVisible, onDialogClose}){
+export default function CertificateDialog ({isOpen, setIsOpen, onDialogClose}){
   const [form] = Form.useForm();
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileName, setSelectedFileName] = useState('');
@@ -26,7 +26,7 @@ export default function CertificateDialog ({isFormVisible, setFormVisible, onDia
     try {
       await uploadCertificate(selectedFile, values.alias);
       form.resetFields();
-      setFormVisible(false);
+      setIsOpen(false);
       onDialogClose();
       setFileList([]);
       setSelectedFile(null);
@@ -47,9 +47,9 @@ export default function CertificateDialog ({isFormVisible, setFormVisible, onDia
   };
 
   return (
-  <Modal visible={isFormVisible}
+  <Modal open={isOpen}
     onCancel={() => {
-    setFormVisible(false);
+    setIsOpen(false);
     form.resetFields();
     setFileList([]);
     setSelectedFile(null);

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { getCertificates, deleteCertificate } from '../services/api';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button} from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
-import AddIcon from '@mui/icons-material/Add';
+import { Table, Button } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import CertificateDialog from './CertificateDialog';
 
 const CertificateTable = () => {
@@ -23,73 +23,51 @@ const CertificateTable = () => {
         loadCertificates();
     };
 
-
     const navigate = useNavigate();
 
     const handleRowDoubleClick = (id) => {
         navigate(`/certificate/${id}`);
     };
 
+    const columns = [
+        { title: 'Alias', dataIndex: 'alias', key: 'alias' },
+        { title: 'Subject', dataIndex: 'subject', key: 'subject' },
+        { title: 'Issuer', dataIndex: 'issuer', key: 'issuer' },
+        { title: 'Serial Number', dataIndex: 'serialNumber', key: 'serialNumber' },
+        { title: 'Expiration Timestamp', dataIndex: 'expirationDate', key: 'expirationDate' },
+        { title: 'Action', key: 'action', render: (text, record) => (
+            <>
+                <Button icon={<DeleteOutlined/>} onClick={() => handleDelete(record.id)}/>
+                <Button icon={<EditOutlined />} onClick={() => navigate(`/certificate/${record.id}`)}/>
+            </>
+        )}
+    ];
+
     return (
         <div style={{ width: '100%', height: '100%' }}>
             <Button
                 onClick={() => setFormVisible(true)}
-                variant="contained"
-                color="primary"
-                startIcon={<AddIcon />}
-                style={{ marginTop: 24,
-                marginBottom: 24,
-                float: 'right' }}
+                type="primary"
+                icon={<PlusOutlined />}
+                style={{ marginTop: 24, marginBottom: 24, float: 'right' }}
             >
                 Add Certificate
             </Button>
             <CertificateDialog
-              isFormVisible={isFormVisible}
-              setFormVisible={setFormVisible}
+              isOpen={isFormVisible}
+              setIsOpen={setFormVisible}
               onDialogClose={loadCertificates}
             />
-            <TableContainer component={Paper} style={{ width: '100%', height: '100%' }}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Alias</TableCell>
-                            <TableCell>Subject</TableCell>
-                            <TableCell>Issuer</TableCell>
-                            <TableCell>Serial Number</TableCell>
-                            <TableCell>Expiration Timestamp</TableCell>
-                            <TableCell>Action</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {certificates.map((row) => (
-                            <TableRow key={row.id} onDoubleClick={() => handleRowDoubleClick(row.id)}>
-                                <TableCell>{row.alias}</TableCell>
-                                <TableCell>{row.subject}</TableCell>
-                                <TableCell>{row.issuer}</TableCell>
-                                <TableCell>{row.serialNumber}</TableCell>
-                                <TableCell>{row.expirationDate}</TableCell>
-                                <TableCell>
-                                    <Button
-                                        variant="contained"
-                                        color="secondary"
-                                        onClick={() => handleDelete(row.id)}
-                                    >
-                                        Remove
-                                    </Button>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        component={Link}
-                                        to={`/certificate/${row.id}`}
-                                    >
-                                        View Details
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <Table
+                onRow={(record, rowIndex) => {
+                    return {
+                        onDoubleClick: event => handleRowDoubleClick(record.id),
+                    };
+                }}
+                columns={columns}
+                dataSource={certificates}
+                rowKey="id"
+            />
         </div>
     );
 };
