@@ -77,4 +77,11 @@ class CmcClientTest {
         Assertions.assertNotNull(exception, CmcClientException.class.getSimpleName() + " is expected, but actual exceptions is " + exception);
         Assertions.assertTrue(exception.getMessage().contains("No certificates found with alias=" + alias), "Wrong error message.");
     }
+
+    @Test
+    void testGetCertificates() {
+        CmcClient cmcClient = CmcClientFactory.createService(CMS_CONFIG);
+        Assertions.assertDoesNotThrow(cmcClient::getCertificates);
+        Assertions.assertTrue(cmcClient.getCertificates().isEmpty());
+    }
 }

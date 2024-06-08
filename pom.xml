@@ -46,6 +46,7 @@
         <module>modules/cmc-document</module>
         <module>modules/cmc-shared</module>
         <module>modules/cmc-sdk</module>
+        <module>modules/cmc-spring-sdk</module>
     </modules>
 
     <dependencyManagement>
