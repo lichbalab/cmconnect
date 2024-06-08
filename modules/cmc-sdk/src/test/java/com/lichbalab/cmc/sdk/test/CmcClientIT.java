@@ -1,6 +1,5 @@
 package com.lichbalab.cmc.sdk.test;
 
-import com.lichbalab.cmc.core.exception.CmcRuntimeException;
 import com.lichbalab.cmc.sdk.CmcClientConfig;
 import com.lichbalab.cmc.sdk.client.CmcClient;
 import com.lichbalab.cmc.sdk.client.CmcClientException;
@@ -19,9 +18,9 @@ import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
-class CmcClientTest {
+class CmcClientIT {
 
-    static final Logger logger = LoggerFactory.getLogger(CmcClientTest.class);
+    static final Logger logger = LoggerFactory.getLogger(CmcClientIT.class);
 
     private static PostgreSQLContainer<?> POSTGRES_CONTAINER;
     private static GenericContainer<?>    CMC_API;
