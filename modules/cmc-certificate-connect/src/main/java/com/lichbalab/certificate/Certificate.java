@@ -1,6 +1,7 @@
 package com.lichbalab.certificate;
 
 import java.math.BigInteger;
+import java.security.PrivateKey;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,9 @@ public class Certificate {
     private String                      issuer;
     private Date                        expirationDate;
     private String serialNumber;
+    private String alias;
+    private String privateKeyPassword;
+    private PrivateKey privateKey;
 
     public byte[] getCertificateChainData() {
         return certificateChainData;
@@ -69,5 +73,29 @@ public class Certificate {
 
     public void setCertChain(List<X509CertificateHolder> certChain) {
         this.certChain = certChain;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setPrivateKeyPassword(String privateKeyPassword) {
+        this.privateKeyPassword = privateKeyPassword;
+    }
+
+    public String getPrivateKeyPassword() {
+        return privateKeyPassword;
+    }
+
+    public void setPrivateKey(PrivateKey privateKey) {
+        this.privateKey = privateKey;
+    }
+
+    public PrivateKey getPrivateKey() {
+        return privateKey;
     }
 }

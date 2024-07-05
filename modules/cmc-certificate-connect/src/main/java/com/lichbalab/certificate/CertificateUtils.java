@@ -83,6 +83,9 @@ public class CertificateUtils {
         certificate.setIssuer(dto.getIssuer());
         certificate.setSerialNumber(dto.getSerialNumber());
         certificate.setCertChain(CertificateUtils.byteArrayToCertChain(dto.getCertificateChainData()));
+        certificate.setAlias(dto.getAlias());
+        certificate.setPrivateKeyPassword(null);
+        certificate.setPrivateKey(convertBytesToPrivateKey(dto.getPrivateKeyData()));
         return certificate;
     }
 
@@ -154,7 +157,7 @@ public class CertificateUtils {
         return bos.toByteArray();
     }
 
-    private static X509Certificate getFromCertHolder(X509CertificateHolder certificateHolder) {
+    public static X509Certificate getFromCertHolder(X509CertificateHolder certificateHolder) {
         JcaX509CertificateConverter converter = new JcaX509CertificateConverter();
 
         try {
