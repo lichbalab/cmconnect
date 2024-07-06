@@ -20,6 +20,9 @@ public class CmcDefaultSslBundleRegistry implements CmcSslBundleRegistry, SslBun
 
     private final Map<String, RegisteredSslBundle> registeredBundles = new ConcurrentHashMap<>();
 
+    private static final String SSL_BUNDLE_NAME = "default";
+
+
     public CmcDefaultSslBundleRegistry() {
     }
 
@@ -48,6 +51,21 @@ public class CmcDefaultSslBundleRegistry implements CmcSslBundleRegistry, SslBun
     @Override
     public void addBundleUpdateHandler(String name, Consumer<SslBundle> updateHandler) throws NoSuchSslBundleException {
         getRegistered(name).addUpdateHandler(updateHandler);
+    }
+
+    @Override
+    public SslBundle getDefaultBundle() {
+        return getBundle(SSL_BUNDLE_NAME);
+    }
+
+    @Override
+    public void registerDefaultBundle(SslBundle bundle) {
+        registerBundle(SSL_BUNDLE_NAME, bundle);
+    }
+
+    @Override
+    public void updateDefaultBundle(SslBundle bundle) {
+        updateBundle(SSL_BUNDLE_NAME, bundle);
     }
 
     private RegisteredSslBundle getRegistered(String name) throws NoSuchSslBundleException {
