@@ -1,4 +1,4 @@
-package com.lichbalab.cms.spring.sdk.test;
+package com.lichbalab.cmc.spring.sdk.test;
 
 import org.springframework.boot.ssl.DefaultSslBundleRegistry;
 import org.springframework.boot.ssl.SslBundle;

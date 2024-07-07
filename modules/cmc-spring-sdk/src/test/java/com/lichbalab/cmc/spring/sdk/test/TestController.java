@@ -1,4 +1,4 @@
-package com.lichbalab.cms.spring.sdk.test;
+package com.lichbalab.cmc.spring.sdk.test;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

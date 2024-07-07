@@ -5,7 +5,6 @@ import com.lichbalab.cmc.sdk.client.CmcClient;
 import com.lichbalab.cmc.sdk.client.CmcClientFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ssl.SslBundle;
-import org.springframework.boot.ssl.SslBundleRegistry;
 import org.springframework.stereotype.Service;
 
 @Service

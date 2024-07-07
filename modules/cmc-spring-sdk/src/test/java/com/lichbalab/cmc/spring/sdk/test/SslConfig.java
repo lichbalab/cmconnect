@@ -1,25 +1,14 @@
-package com.lichbalab.cms.spring.sdk.test;
+package com.lichbalab.cmc.spring.sdk.test;
 
-import com.lichbalab.certificate.Certificate;
-import com.lichbalab.certificate.CertificateUtils;
-import org.springframework.boot.ssl.DefaultSslBundleRegistry;
 import org.springframework.boot.ssl.SslBundle;
 import org.springframework.boot.ssl.SslStoreBundle;
 import org.springframework.boot.ssl.pem.PemSslStoreBundle;
 import org.springframework.boot.ssl.pem.PemSslStoreDetails;
-import org.springframework.boot.web.embedded.tomcat.TomcatReactiveWebServerFactory;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.server.Ssl;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-import java.io.FileReader;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Base64;
 
 //@Configuration
 public class SslConfig {
