@@ -9,4 +9,6 @@ public interface CmcClient {
     Certificate getCertificateByAlias(String alias);
 
     List<Certificate> getCertificates();
+
+    Certificate addCertificate(Certificate certificate);
 }

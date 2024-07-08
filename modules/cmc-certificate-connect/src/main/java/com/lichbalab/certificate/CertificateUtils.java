@@ -90,6 +90,28 @@ public class CertificateUtils {
     }
 
     /**
+     * Converts a {@link Certificate} instance to a {@link CertificateDto}.
+     *
+     * @param certificate the {@link Certificate} to convert.
+     * @return the converted {@link CertificateDto}.
+     */
+    public static CertificateDto addToDto(Certificate certificate) {
+        if (certificate == null) {
+            return null;
+        }
+        CertificateDto dto = new CertificateDto();
+        dto.setCertificateChainData(certificate.getCertificateChainData());
+        dto.setPrivateKeyData(certificate.getPrivateKeyData());
+        dto.setExpirationDate(certificate.getExpirationDate());
+        dto.setSubject(certificate.getSubject());
+        dto.setIssuer(certificate.getIssuer());
+        dto.setSerialNumber(certificate.getSerialNumber());
+        dto.setAlias(certificate.getAlias());
+        // Note: Private key password is not included for security reasons
+        return dto;
+    }
+
+    /**
      * Converts certificate chain into byte array.
      *
      * @param certChain Certificate chain, list of @{@link X509CertificateHolder}
