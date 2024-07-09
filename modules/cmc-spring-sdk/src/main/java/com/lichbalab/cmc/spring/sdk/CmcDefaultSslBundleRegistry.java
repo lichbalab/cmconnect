@@ -20,7 +20,7 @@ public class CmcDefaultSslBundleRegistry implements CmcSslBundleRegistry, SslBun
 
     private final Map<String, RegisteredSslBundle> registeredBundles = new ConcurrentHashMap<>();
 
-    private static final String SSL_BUNDLE_NAME = "default";
+    public static final String SSL_BUNDLE_NAME = "default";
 
 
     public CmcDefaultSslBundleRegistry() {
@@ -34,7 +34,7 @@ public class CmcDefaultSslBundleRegistry implements CmcSslBundleRegistry, SslBun
     public void registerBundle(String name, SslBundle bundle) {
         Assert.notNull(name, "Name must not be null");
         Assert.notNull(bundle, "Bundle must not be null");
-        CmcDefaultSslBundleRegistry.RegisteredSslBundle previous = this.registeredBundles.putIfAbsent(name, new RegisteredSslBundle(name, bundle));
+        RegisteredSslBundle previous = this.registeredBundles.putIfAbsent(name, new RegisteredSslBundle(name, bundle));
         Assert.state(previous == null, () -> "Cannot replace existing SSL bundle '%s'".formatted(name));
     }
 

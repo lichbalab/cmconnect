@@ -1,6 +1,10 @@
 package com.lichbalab.cmc.spring.sdk.test;
 
+import com.lichbalab.certificate.Certificate;
+import com.lichbalab.certificate.CertificateTestHelper;
+import com.lichbalab.certificate.dto.CertificateDto;
 import com.lichbalab.cmc.sdk.CmcClientConfig;
+import com.lichbalab.cmc.sdk.client.CmcClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
@@ -15,6 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +30,8 @@ import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,6 +46,12 @@ public class CmcSpringSdkIT {
     private static PostgreSQLContainer<?> POSTGRES_CONTAINER;
     private static GenericContainer<?> CMC_API;
     private static CmcClientConfig CMS_CONFIG;
+
+    @Autowired
+    private CmcClient cmcClient;
+
+    private final static List<Certificate> CERTS = CertificateTestHelper.CERTS;
+
 
     @BeforeAll
     public static void beforeAll() {
@@ -65,6 +78,7 @@ public class CmcSpringSdkIT {
                 .withEnv("DB_USERNAME", POSTGRES_CONTAINER.getUsername())
                 .withEnv("DB_PASSWORD", POSTGRES_CONTAINER.getPassword());
         CMC_API.start();
+
     }
 
     @AfterAll
@@ -90,6 +104,9 @@ public class CmcSpringSdkIT {
 
     @Test
     public void testHttpsEndpointWitRestTemplate() throws Exception {
+        CERTS.forEach(cert -> cmcClient.addCertificate(cert));
+
+
         // Create an HttpClient that uses the custom SSLContext
         CloseableHttpClient httpClient = HttpClients.custom()
                 .setConnectionManager(PoolingHttpClientConnectionManagerBuilder.create()

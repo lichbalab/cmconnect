@@ -5,20 +5,18 @@ import com.lichbalab.cmc.sdk.client.CmcClient;
 import com.lichbalab.cmc.sdk.client.CmcClientFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ssl.SslBundle;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 @Service
+@DependsOn("cmcSslBundleRegistryInitializer")
 public class SslBundleRegistrySynchronizer {
 
     private final SslBundleProvider sslBundleProvider;
 
     @Autowired
-    public SslBundleRegistrySynchronizer(CmcClientConfig config) {
-        CmcClient cmcClient = CmcClientFactory.createService(config);
-        this.sslBundleProvider = new SslBundleProvider(cmcClient);
-        CmcSslBundleRegistry sslBundleRegistry = CmcSslBundleRegistryProvider.getRegistry();
-        SslBundle sslBundle = sslBundleProvider.getBundle();
-        sslBundleRegistry.registerDefaultBundle(sslBundle);
+    public SslBundleRegistrySynchronizer(SslBundleProvider sslBundleProvider) {
+        this.sslBundleProvider = sslBundleProvider;
     }
 
     public void synchronize() {

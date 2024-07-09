@@ -53,7 +53,7 @@ public class CertificateUtils {
             }
         }
 
-        if (certChain.isEmpty() || privateKey == null) {
+        if (certChain.isEmpty() && privateKey == null) {
             throw new IllegalArgumentException("The provided PEM file must contain at least a certificate or a private key.");
         }
 
@@ -61,7 +61,11 @@ public class CertificateUtils {
 
         Certificate certificateObj = new Certificate();
         certificateObj.setCertificateChainData(CertificateUtils.certChainToByteArray(certChain));
-        certificateObj.setPrivateKeyData(privateKey.getEncoded());
+
+        if (privateKey != null) {
+            certificateObj.setPrivateKeyData(privateKey.getEncoded());
+        }
+        //certificateObj.setPrivateKeyData(privateKey.getEncoded());
         certificateObj.setExpirationDate(cert.getNotAfter());
         certificateObj.setSubject(cert.getSubject().toString());
         certificateObj.setIssuer(cert.getIssuer().toString());
@@ -85,7 +89,9 @@ public class CertificateUtils {
         certificate.setCertChain(CertificateUtils.byteArrayToCertChain(dto.getCertificateChainData()));
         certificate.setAlias(dto.getAlias());
         certificate.setPrivateKeyPassword(null);
-        certificate.setPrivateKey(convertBytesToPrivateKey(dto.getPrivateKeyData()));
+        if (dto.getPrivateKeyData() != null) {
+            certificate.setPrivateKey(convertBytesToPrivateKey(dto.getPrivateKeyData()));
+        }
         return certificate;
     }
 

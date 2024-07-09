@@ -3,7 +3,7 @@ package com.lichbalab.cmc.repository;
 import java.util.List;
 import java.util.Optional;
 
-import com.lichbalab.cmc.CertificateTestHelper;
+import com.lichbalab.certificate.CertificateTestHelper;
 import com.lichbalab.cmc.mapper.CertificateMapper;
 import com.lichbalab.cmc.model.Certificate;
 import org.junit.jupiter.api.AfterEach;
@@ -59,7 +59,7 @@ public class CertificateRepositoryTest {
 
     @AfterEach
     public void tearDown() {
-        CertificateTestHelper.cleanUpCertificates(entityManager);
+        cleanUpCertificates(entityManager);
     }
 
     @Test
@@ -107,5 +107,10 @@ public class CertificateRepositoryTest {
         try (PostgreSQLContainer<?> databaseContainer = new PostgreSQLContainer<>("postgres:16-alpine")){
             return databaseContainer;
         }
+    }
+
+    public static void cleanUpCertificates(TestEntityManager entityManager) {
+        List<Certificate> allCerts = entityManager.getEntityManager().createQuery("SELECT c FROM Certificate c", Certificate.class).getResultList();
+        allCerts.forEach(c -> entityManager.getEntityManager().remove(c));
     }
 }
