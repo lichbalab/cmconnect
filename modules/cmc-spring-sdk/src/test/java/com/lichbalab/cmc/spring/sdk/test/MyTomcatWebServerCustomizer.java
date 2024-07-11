@@ -23,6 +23,7 @@ import java.util.List;
 @Component
 public class MyTomcatWebServerCustomizer implements WebServerFactoryCustomizer<TomcatServletWebServerFactory> {
 
+    public static final List<String> ALIASES = List.of("lichbalab1.pem", "lichbalab2.pem", "lichbalab3.pem");
 
     @Autowired
     private CmcClient cmcClient;
@@ -45,7 +46,9 @@ public class MyTomcatWebServerCustomizer implements WebServerFactoryCustomizer<T
         }
 */
 
-        CERTS.forEach(cert -> cmcClient.addCertificate(cert));
+        CERTS.stream()
+                .filter(cert -> !ALIASES.getLast().equals(cert.getAlias()))
+                .forEach(cert -> cmcClient.addCertificate(cert));
         sslBundleRegistryInitializer.init();
         factory.setSslBundles(CmcSslBundleRegistryProvider.getSslBundles());
         factory.setSsl(Ssl.forBundle(CmcDefaultSslBundleRegistry.SSL_BUNDLE_NAME));

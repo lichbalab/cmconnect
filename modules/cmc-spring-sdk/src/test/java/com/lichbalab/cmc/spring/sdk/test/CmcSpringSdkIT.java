@@ -20,8 +20,15 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ssl.DefaultSslBundleRegistry;
+import org.springframework.boot.ssl.SslBundle;
+import org.springframework.boot.ssl.SslBundles;
+import org.springframework.boot.ssl.SslStoreBundle;
+import org.springframework.boot.ssl.pem.PemSslStoreBundle;
+import org.springframework.boot.ssl.pem.PemSslStoreDetails;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
@@ -31,6 +38,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,6 +50,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CmcSpringSdkIT {
 
     static final Logger logger = LoggerFactory.getLogger(CmcSpringSdkIT.class);
+
+    private static final String TEST_SSL_BUNDLE_NAME = "test";
 
     private static PostgreSQLContainer<?> POSTGRES_CONTAINER;
     private static GenericContainer<?> CMC_API;
@@ -104,10 +114,11 @@ public class CmcSpringSdkIT {
 
     @Test
     public void testHttpsEndpointWitRestTemplate() throws Exception {
-        CERTS.forEach(cert -> cmcClient.addCertificate(cert));
+        //CERTS.forEach(cert -> cmcClient.addCertificate(cert));
 
 
         // Create an HttpClient that uses the custom SSLContext
+/*
         CloseableHttpClient httpClient = HttpClients.custom()
                 .setConnectionManager(PoolingHttpClientConnectionManagerBuilder.create()
                         .setSSLSocketFactory(SSLConnectionSocketFactoryBuilder.create()
@@ -121,7 +132,10 @@ public class CmcSpringSdkIT {
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
         requestFactory.setHttpClient(httpClient);
 
-        RestTemplate restTemplate = new RestTemplate(requestFactory);
+*/
+
+        RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
+        RestTemplate restTemplate = restTemplateBuilder.setSslBundle(createSslBundles().getBundle(TEST_SSL_BUNDLE_NAME)).build();;
 
         // Make a GET request to the /hello endpoint
 
@@ -163,5 +177,25 @@ public class CmcSpringSdkIT {
 */
 
 
+    }
+
+    protected SslBundles createSslBundles() {
+        DefaultSslBundleRegistry bundles = null;
+        try {
+            bundles = new DefaultSslBundleRegistry(TEST_SSL_BUNDLE_NAME,
+                    createPemSslBundle(SslConfig.class.getResource("/ssl-bundles/test1.crt").toURI().toString(),
+                            SslConfig.class.getResource("/ssl-bundles/test1.key").toURI().toString()));
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        return bundles;
+   }
+
+
+    protected SslBundle createPemSslBundle(String cert, String privateKey) {
+        PemSslStoreDetails keyStoreDetails = PemSslStoreDetails.forCertificate(cert).withPrivateKey(privateKey);
+        PemSslStoreDetails trustStoreDetails = PemSslStoreDetails.forCertificate(cert);
+        SslStoreBundle stores = new PemSslStoreBundle(keyStoreDetails, trustStoreDetails);
+        return SslBundle.of(stores);
     }
 }

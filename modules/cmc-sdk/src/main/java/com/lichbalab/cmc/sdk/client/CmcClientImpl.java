@@ -70,6 +70,8 @@ class CmcClientImpl implements CmcClient {
         return CertificateUtils.buildFromDto(responseDto);
     }
 
+
+
     private <T> Mono<T> handleErrors(Mono<T> mono) {
         return mono.onErrorMap(WebClientRequestException.class, ex -> new CmcClientException("Error calling cmc-rest-api", ex))
                 .onErrorMap(CmcRuntimeException.class, ex -> {throw ex;})
