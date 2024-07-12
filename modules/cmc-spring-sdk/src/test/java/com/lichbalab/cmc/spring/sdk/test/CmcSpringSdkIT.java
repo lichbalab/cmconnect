@@ -5,6 +5,8 @@ import com.lichbalab.certificate.CertificateTestHelper;
 import com.lichbalab.certificate.dto.CertificateDto;
 import com.lichbalab.cmc.sdk.CmcClientConfig;
 import com.lichbalab.cmc.sdk.client.CmcClient;
+import com.lichbalab.cmc.spring.sdk.CmcSslBundleRegistryProvider;
+import com.lichbalab.cmc.spring.sdk.SslBundleRegistrySynchronizer;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
@@ -22,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ssl.DefaultSslBundleRegistry;
 import org.springframework.boot.ssl.SslBundle;
+import org.springframework.boot.ssl.SslBundleKey;
 import org.springframework.boot.ssl.SslBundles;
 import org.springframework.boot.ssl.SslStoreBundle;
 import org.springframework.boot.ssl.pem.PemSslStoreBundle;
@@ -59,6 +62,9 @@ public class CmcSpringSdkIT {
 
     @Autowired
     private CmcClient cmcClient;
+
+    @Autowired
+    private SslBundleRegistrySynchronizer sslBundleRegistrySynchronizer;
 
     private final static List<Certificate> CERTS = CertificateTestHelper.CERTS;
 
@@ -116,15 +122,14 @@ public class CmcSpringSdkIT {
     public void testHttpsEndpointWitRestTemplate() throws Exception {
         //CERTS.forEach(cert -> cmcClient.addCertificate(cert));
 
+        SslBundle sslBundle = createSslBundles().getBundle(TEST_SSL_BUNDLE_NAME);
+
 
         // Create an HttpClient that uses the custom SSLContext
-/*
         CloseableHttpClient httpClient = HttpClients.custom()
                 .setConnectionManager(PoolingHttpClientConnectionManagerBuilder.create()
                         .setSSLSocketFactory(SSLConnectionSocketFactoryBuilder.create()
-                                .setSslContext(SSLContextBuilder.create()
-                                        .loadTrustMaterial(TrustAllStrategy.INSTANCE)
-                                        .build())
+                                .setSslContext(sslBundle.createSslContext())
                                 .setHostnameVerifier(NoopHostnameVerifier.INSTANCE)
                                 .build())
                         .build())
@@ -132,10 +137,10 @@ public class CmcSpringSdkIT {
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
         requestFactory.setHttpClient(httpClient);
 
-*/
 
-        RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
-        RestTemplate restTemplate = restTemplateBuilder.setSslBundle(createSslBundles().getBundle(TEST_SSL_BUNDLE_NAME)).build();;
+        //RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
+        //RestTemplate restTemplate = restTemplateBuilder.setSslBundle(createSslBundles().getBundle(TEST_SSL_BUNDLE_NAME)).build();;
+        RestTemplate restTemplate = new RestTemplate(requestFactory);
 
         // Make a GET request to the /hello endpoint
 
@@ -148,8 +153,25 @@ public class CmcSpringSdkIT {
             e.printStackTrace();
         }
 
+        //Assertions.assertNotNull(response, "Response is null");
+        //assertThat(response.getBody()).isEqualTo("Hello, World!");
+        CERTS.stream()
+                .filter(cert -> MyTomcatWebServerCustomizer.ALIASES.getLast().equals(cert.getAlias()))
+                .forEach(cert -> cmcClient.addCertificate(cert));
+        sslBundleRegistrySynchronizer.synchronize(SslBundleKey.of(null, MyTomcatWebServerCustomizer.ALIASES.getLast()));
+
+        try {
+            response = restTemplate.getForEntity("https://127.0.0.1:" + port + "/test/hello", String.class);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         Assertions.assertNotNull(response, "Response is null");
         assertThat(response.getBody()).isEqualTo("Hello, World!");
+
+
     }
 
     public void testHttpsEndpointWithWebCLient() {

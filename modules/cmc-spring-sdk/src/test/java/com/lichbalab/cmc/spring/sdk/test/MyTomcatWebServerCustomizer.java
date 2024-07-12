@@ -9,6 +9,7 @@ import com.lichbalab.cmc.spring.sdk.CmcSslBundleRegistryProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ssl.DefaultSslBundleRegistry;
 import org.springframework.boot.ssl.SslBundle;
+import org.springframework.boot.ssl.SslBundleKey;
 import org.springframework.boot.ssl.SslStoreBundle;
 import org.springframework.boot.ssl.pem.PemSslStoreBundle;
 import org.springframework.boot.ssl.pem.PemSslStoreDetails;
@@ -49,7 +50,7 @@ public class MyTomcatWebServerCustomizer implements WebServerFactoryCustomizer<T
         CERTS.stream()
                 .filter(cert -> !ALIASES.getLast().equals(cert.getAlias()))
                 .forEach(cert -> cmcClient.addCertificate(cert));
-        sslBundleRegistryInitializer.init();
+        sslBundleRegistryInitializer.init(SslBundleKey.of(null, ALIASES.get(1)));
         factory.setSslBundles(CmcSslBundleRegistryProvider.getSslBundles());
         factory.setSsl(Ssl.forBundle(CmcDefaultSslBundleRegistry.SSL_BUNDLE_NAME));
         // customize the factory here

@@ -4,6 +4,7 @@ import com.lichbalab.certificate.Certificate;
 import com.lichbalab.cmc.sdk.client.CmcClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ssl.SslBundle;
+import org.springframework.boot.ssl.SslBundleKey;
 import org.springframework.boot.ssl.SslStoreBundle;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +21,13 @@ public class SslBundleProvider {
     }
 
     public SslBundle getBundle() {
+        return getBundle(null);
+    }
+
+    public SslBundle getBundle(SslBundleKey key) {
         List<Certificate> cmcClientCertificates = cmcClient.getCertificates();
         SslStoreBundle sslStoreBundle = new CmcSslStoreBundle(cmcClientCertificates);
-        return SslBundle.of(sslStoreBundle);
+        return SslBundle.of(sslStoreBundle, key);
     }
+
 }
