@@ -2,18 +2,14 @@ package com.lichbalab.cmc.spring.sdk.test;
 
 import com.lichbalab.certificate.Certificate;
 import com.lichbalab.certificate.CertificateTestHelper;
-import com.lichbalab.certificate.dto.CertificateDto;
 import com.lichbalab.cmc.sdk.CmcClientConfig;
 import com.lichbalab.cmc.sdk.client.CmcClient;
-import com.lichbalab.cmc.spring.sdk.CmcSslBundleRegistryProvider;
 import com.lichbalab.cmc.spring.sdk.SslBundleRegistrySynchronizer;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
 import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
-import org.apache.hc.client5.http.ssl.TrustAllStrategy;
-import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,7 +27,6 @@ import org.springframework.boot.ssl.pem.PemSslStoreBundle;
 import org.springframework.boot.ssl.pem.PemSslStoreDetails;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
@@ -41,6 +36,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import javax.net.ssl.SSLHandshakeException;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -48,17 +44,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
 @SpringBootTest(classes = TestApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@ComponentScan(basePackages = "com.lichbalab.cmc.spring.sdk.test") // Scan the test package
-//@ContextConfiguration(classes = {SslConfig.class, MyTomcatWebServerCustomizer.class}) // Import the SSL config and the test controller
-public class CmcSpringSdkIT {
+public class CmcSpringSdkTomcatIT {
 
-    static final Logger logger = LoggerFactory.getLogger(CmcSpringSdkIT.class);
+    static final Logger logger = LoggerFactory.getLogger(CmcSpringSdkTomcatIT.class);
 
     private static final String TEST_SSL_BUNDLE_NAME = "test";
 
     private static PostgreSQLContainer<?> POSTGRES_CONTAINER;
     private static GenericContainer<?> CMC_API;
-    private static CmcClientConfig CMS_CONFIG;
 
     @Autowired
     private CmcClient cmcClient;
@@ -94,7 +87,6 @@ public class CmcSpringSdkIT {
                 .withEnv("DB_USERNAME", POSTGRES_CONTAINER.getUsername())
                 .withEnv("DB_PASSWORD", POSTGRES_CONTAINER.getPassword());
         CMC_API.start();
-
     }
 
     @AfterAll
@@ -103,20 +95,8 @@ public class CmcSpringSdkIT {
         POSTGRES_CONTAINER.stop();
     }
 
-
     @LocalServerPort
     private int port;
-
-
-    @BeforeEach
-    public void setUp() {
-    }
-
-
-/*
-    @Autowired
-    private WebClient.Builder webClientBuilder;
-*/
 
     @Test
     public void testHttpsEndpointWitRestTemplate() throws Exception {
@@ -137,41 +117,41 @@ public class CmcSpringSdkIT {
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
         requestFactory.setHttpClient(httpClient);
 
-
-        //RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
-        //RestTemplate restTemplate = restTemplateBuilder.setSslBundle(createSslBundles().getBundle(TEST_SSL_BUNDLE_NAME)).build();;
         RestTemplate restTemplate = new RestTemplate(requestFactory);
 
         // Make a GET request to the /hello endpoint
-
         ResponseEntity<String> response = null;
         try {
             response = restTemplate.getForEntity("https://127.0.0.1:" + port + "/test/hello", String.class);
-
-
         } catch (Exception e) {
-            e.printStackTrace();
+            // Check if the exception is caused by an SSLHandshakeException
+            Throwable cause = e;
+            boolean handshakeExceptionFound = false;
+            while (cause != null) {
+                if (cause instanceof SSLHandshakeException) {
+                    handshakeExceptionFound = true;
+                    break; // SSLHandshakeException found, exit loop
+                }
+                cause = cause.getCause(); // Move to the next cause
+            }
+            if (!handshakeExceptionFound) {
+                Assertions.fail("SSLHandshakeException was not found in the cause chain");
+            }
         }
 
-        //Assertions.assertNotNull(response, "Response is null");
-        //assertThat(response.getBody()).isEqualTo("Hello, World!");
+        // load required certificate to escape SSLHandshakeException
         CERTS.stream()
-                .filter(cert -> MyTomcatWebServerCustomizer.ALIASES.getLast().equals(cert.getAlias()))
+                .filter(cert -> TestTomcatWebServerCustomizer.ALIASES.getLast().equals(cert.getAlias()))
                 .forEach(cert -> cmcClient.addCertificate(cert));
-        sslBundleRegistrySynchronizer.synchronize(SslBundleKey.of(null, MyTomcatWebServerCustomizer.ALIASES.getLast()));
+        sslBundleRegistrySynchronizer.synchronize(SslBundleKey.of(null, TestTomcatWebServerCustomizer.ALIASES.getLast()));
 
         try {
             response = restTemplate.getForEntity("https://127.0.0.1:" + port + "/test/hello", String.class);
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         Assertions.assertNotNull(response, "Response is null");
         assertThat(response.getBody()).isEqualTo("Hello, World!");
-
-
     }
 
     public void testHttpsEndpointWithWebCLient() {
@@ -198,21 +178,19 @@ public class CmcSpringSdkIT {
         assertThat(result).isEqualTo("Hello, World!");
 */
 
-
     }
 
     protected SslBundles createSslBundles() {
-        DefaultSslBundleRegistry bundles = null;
+        DefaultSslBundleRegistry bundles;
         try {
             bundles = new DefaultSslBundleRegistry(TEST_SSL_BUNDLE_NAME,
-                    createPemSslBundle(SslConfig.class.getResource("/ssl-bundles/test1.crt").toURI().toString(),
-                            SslConfig.class.getResource("/ssl-bundles/test1.key").toURI().toString()));
+                    createPemSslBundle(CmcSpringSdkTomcatIT.class.getResource("/ssl-bundles/lichbalab3.crt").toURI().toString(),
+                            CmcSpringSdkTomcatIT.class.getResource("/ssl-bundles/lichbalab3.key").toURI().toString()));
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
         return bundles;
-   }
-
+    }
 
     protected SslBundle createPemSslBundle(String cert, String privateKey) {
         PemSslStoreDetails keyStoreDetails = PemSslStoreDetails.forCertificate(cert).withPrivateKey(privateKey);
