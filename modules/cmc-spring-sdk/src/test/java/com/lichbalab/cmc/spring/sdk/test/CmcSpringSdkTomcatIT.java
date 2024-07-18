@@ -10,6 +10,7 @@ import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
 import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
+import org.junit.Assert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -99,12 +100,37 @@ public class CmcSpringSdkTomcatIT {
     private int port;
 
     @Test
-    public void testHttpsEndpointWitRestTemplate() throws Exception {
+    public void test1WaySslListenerWitRestTemplate() throws Exception {
         //CERTS.forEach(cert -> cmcClient.addCertificate(cert));
 
         SslBundle sslBundle = createSslBundles().getBundle(TEST_SSL_BUNDLE_NAME);
+        RestTemplate restTemplate = createRestTemplate(sslBundle);
 
+        // Make a GET request to the /hello endpoint
+        callApiAndCechHandshakeException(restTemplate);
 
+        // load required certificate to escape SSLHandshakeException
+        CERTS.stream()
+                .filter(cert -> TestTomcatWebServerCustomizer.ALIASES.getLast().equals(cert.getAlias()))
+                .forEach(cert -> cmcClient.addCertificate(cert));
+        sslBundleRegistrySynchronizer.synchronize(SslBundleKey.of(null, TestTomcatWebServerCustomizer.ALIASES.getLast()));
+
+        ResponseEntity<String> response = callRestApi(restTemplate);
+        Assertions.assertNotNull(response, "Response is null");
+        assertThat(response.getBody()).isEqualTo("Hello, World!");
+
+        //sslBundleRegistrySynchronizer.synchronize(SslBundleKey.of(null, TestTomcatWebServerCustomizer.ALIASES.get(1)));
+        //callApiAndCechHandshakeException(restTemplate);
+    }
+
+    @Test
+    void test2WaySslListenerWitRestTemplate() {
+        //CERTS.forEach(cert -> cmcClient.addCertificate(cert));
+
+        SslBundle sslBundle = createSslBundles().getBundle(TEST_SSL_BUNDLE_NAME);
+    }
+
+    private RestTemplate createRestTemplate(SslBundle sslBundle) {
         // Create an HttpClient that uses the custom SSLContext
         CloseableHttpClient httpClient = HttpClients.custom()
                 .setConnectionManager(PoolingHttpClientConnectionManagerBuilder.create()
@@ -117,42 +143,39 @@ public class CmcSpringSdkTomcatIT {
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
         requestFactory.setHttpClient(httpClient);
 
-        RestTemplate restTemplate = new RestTemplate(requestFactory);
-
-        // Make a GET request to the /hello endpoint
-        ResponseEntity<String> response = null;
-        try {
-            response = restTemplate.getForEntity("https://127.0.0.1:" + port + "/test/hello", String.class);
-        } catch (Exception e) {
-            // Check if the exception is caused by an SSLHandshakeException
-            Throwable cause = e;
-            boolean handshakeExceptionFound = false;
-            while (cause != null) {
-                if (cause instanceof SSLHandshakeException) {
-                    handshakeExceptionFound = true;
-                    break; // SSLHandshakeException found, exit loop
-                }
-                cause = cause.getCause(); // Move to the next cause
-            }
-            if (!handshakeExceptionFound) {
-                Assertions.fail("SSLHandshakeException was not found in the cause chain");
-            }
-        }
-
-        // load required certificate to escape SSLHandshakeException
-        CERTS.stream()
-                .filter(cert -> TestTomcatWebServerCustomizer.ALIASES.getLast().equals(cert.getAlias()))
-                .forEach(cert -> cmcClient.addCertificate(cert));
-        sslBundleRegistrySynchronizer.synchronize(SslBundleKey.of(null, TestTomcatWebServerCustomizer.ALIASES.getLast()));
-
-        try {
-            response = restTemplate.getForEntity("https://127.0.0.1:" + port + "/test/hello", String.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Assertions.assertNotNull(response, "Response is null");
-        assertThat(response.getBody()).isEqualTo("Hello, World!");
+        return new RestTemplate(requestFactory);
     }
+
+    void callApiAndCechHandshakeException(RestTemplate restTemplate) {
+        Exception ex = null;
+        try {
+            callRestApi(restTemplate);
+        } catch (Exception e) {
+            ex = e;
+            assertHandshakeException(e);
+        }
+        Assertions.assertNotNull(ex, "SSLHandshakeException was not thrown");
+    }
+
+
+    private ResponseEntity<String> callRestApi(RestTemplate restTemplate) {
+        return restTemplate.getForEntity("https://127.0.0.1:" + port + "/test/hello", String.class);
+    }
+
+    private void assertHandshakeException(Throwable cause) {
+        boolean handshakeExceptionFound = false;
+        while (cause != null) {
+            if (cause instanceof SSLHandshakeException) {
+                handshakeExceptionFound = true;
+                break; // SSLHandshakeException found, exit loop
+            }
+            cause = cause.getCause(); // Move to the next cause
+        }
+        if (!handshakeExceptionFound) {
+            Assertions.fail("SSLHandshakeException was not found in the cause chain");
+        }
+    }
+
 
     public void testHttpsEndpointWithWebCLient() {
         /*

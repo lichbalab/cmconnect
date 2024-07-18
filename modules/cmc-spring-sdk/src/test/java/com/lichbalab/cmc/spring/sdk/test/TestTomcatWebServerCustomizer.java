@@ -18,7 +18,13 @@ import java.util.List;
 @Component
 public class TestTomcatWebServerCustomizer implements WebServerFactoryCustomizer<TomcatServletWebServerFactory> {
 
-    public static final List<String> ALIASES = List.of("lichbalab1.pem", "lichbalab2.pem", "lichbalab3.pem");
+    public TomcatServletWebServerFactory factory;
+
+    public static final List<String> ALIASES = List.of(
+            "lichbalab1.pem",
+            "lichbalab2.pem",
+            "lichbalab3.pem"
+    );
 
     @Autowired
     private CmcClient cmcClient;
@@ -36,5 +42,6 @@ public class TestTomcatWebServerCustomizer implements WebServerFactoryCustomizer
         sslBundleRegistryInitializer.init(SslBundleKey.of(null, ALIASES.get(1)));
         factory.setSslBundles(CmcSslBundleRegistryProvider.getSslBundles());
         factory.setSsl(Ssl.forBundle(CmcDefaultSslBundleRegistry.SSL_BUNDLE_NAME));
+        this.factory = factory;
     }
 }
