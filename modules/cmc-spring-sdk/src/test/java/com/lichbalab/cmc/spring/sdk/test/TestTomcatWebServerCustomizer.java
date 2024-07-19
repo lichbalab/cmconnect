@@ -20,12 +20,6 @@ public class TestTomcatWebServerCustomizer implements WebServerFactoryCustomizer
 
     public TomcatServletWebServerFactory factory;
 
-    public static final List<String> ALIASES = List.of(
-            "lichbalab1.pem",
-            "lichbalab2.pem",
-            "lichbalab3.pem"
-    );
-
     @Autowired
     private CmcClient cmcClient;
 
@@ -37,9 +31,9 @@ public class TestTomcatWebServerCustomizer implements WebServerFactoryCustomizer
     @Override
     public void customize(TomcatServletWebServerFactory factory) {
         CERTS.stream()
-                .filter(cert -> !ALIASES.getLast().equals(cert.getAlias()))
+                .filter(cert -> List.of(CertConfig.ALIAS_1, CertConfig.ALIAS_2).contains(cert.getAlias()))
                 .forEach(cert -> cmcClient.addCertificate(cert));
-        sslBundleRegistryInitializer.init(SslBundleKey.of(null, ALIASES.get(1)));
+        sslBundleRegistryInitializer.init(SslBundleKey.of(null, CertConfig.ALIAS_2));
         factory.setSslBundles(CmcSslBundleRegistryProvider.getSslBundles());
         factory.setSsl(Ssl.forBundle(CmcDefaultSslBundleRegistry.SSL_BUNDLE_NAME));
         this.factory = factory;

@@ -2,7 +2,6 @@ package com.lichbalab.cmc.spring.sdk.test;
 
 import com.lichbalab.certificate.Certificate;
 import com.lichbalab.certificate.CertificateTestHelper;
-import com.lichbalab.cmc.sdk.CmcClientConfig;
 import com.lichbalab.cmc.sdk.client.CmcClient;
 import com.lichbalab.cmc.spring.sdk.SslBundleRegistrySynchronizer;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -10,11 +9,9 @@ import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
 import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
-import org.junit.Assert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +25,9 @@ import org.springframework.boot.ssl.pem.PemSslStoreBundle;
 import org.springframework.boot.ssl.pem.PemSslStoreDetails;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
@@ -91,7 +91,7 @@ public class CmcSpringSdkTomcatIT {
     }
 
     @AfterAll
-    public static void afterAll() throws Exception {
+    public static void afterAll() {
         CMC_API.stop();
         POSTGRES_CONTAINER.stop();
     }
@@ -101,26 +101,32 @@ public class CmcSpringSdkTomcatIT {
 
     @Test
     public void test1WaySslListenerWitRestTemplate() throws Exception {
-        //CERTS.forEach(cert -> cmcClient.addCertificate(cert));
-
         SslBundle sslBundle = createSslBundles().getBundle(TEST_SSL_BUNDLE_NAME);
         RestTemplate restTemplate = createRestTemplate(sslBundle);
 
         // Make a GET request to the /hello endpoint
+        // The server certificate lichbalab2.pem is not trusted by the client
+        // which can trust only the certificate with alias "lichbalab3.pem",
+        // so it should result in SSLHandshakeException
         callApiAndCechHandshakeException(restTemplate);
 
-        // load required certificate to escape SSLHandshakeException
+        // Load required certificate to escape SSLHandshakeException
         CERTS.stream()
-                .filter(cert -> TestTomcatWebServerCustomizer.ALIASES.getLast().equals(cert.getAlias()))
+                .filter(cert -> CertConfig.ALIAS_3.equals(cert.getAlias()))
                 .forEach(cert -> cmcClient.addCertificate(cert));
-        sslBundleRegistrySynchronizer.synchronize(SslBundleKey.of(null, TestTomcatWebServerCustomizer.ALIASES.getLast()));
+
+        // Update SSL context for the REST API endpoint with server certificate with alias "lichbalab3.pem"
+        sslBundleRegistrySynchronizer.synchronize(SslBundleKey.of(null, CertConfig.ALIAS_3));
 
         ResponseEntity<String> response = callRestApi(restTemplate);
         Assertions.assertNotNull(response, "Response is null");
         assertThat(response.getBody()).isEqualTo("Hello, World!");
 
-        //sslBundleRegistrySynchronizer.synchronize(SslBundleKey.of(null, TestTomcatWebServerCustomizer.ALIASES.get(1)));
-        //callApiAndCechHandshakeException(restTemplate);
+        // Update SSL context for the REST API endpoint with server certificate with alias "lichbalab2.pem"
+        sslBundleRegistrySynchronizer.synchronize(SslBundleKey.of(null, CertConfig.ALIAS_2));
+        // Should result in SSLHandshakeException because the server certificate is not trusted by the client
+        // which can trust only the certificate with alias "lichbalab3.pem"
+        callApiAndCechHandshakeException(restTemplate);
     }
 
     @Test
@@ -159,7 +165,20 @@ public class CmcSpringSdkTomcatIT {
 
 
     private ResponseEntity<String> callRestApi(RestTemplate restTemplate) {
-        return restTemplate.getForEntity("https://127.0.0.1:" + port + "/test/hello", String.class);
+        HttpHeaders headers = new HttpHeaders();
+        // close connection after the request is completed, to avoid connection reuse
+        // and initialization of SSL handshake for each request.
+        headers.setConnection("close");
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        // Use the exchange method to send the request and receive a response
+        return restTemplate.exchange(
+                "https://127.0.0.1:" + port + "/test/hello",
+                HttpMethod.GET,
+                entity,
+                String.class
+        );
     }
 
     private void assertHandshakeException(Throwable cause) {
