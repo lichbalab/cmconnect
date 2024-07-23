@@ -97,4 +97,10 @@ public class CertificateController {
         }
         return new ResponseEntity<>(cert, HttpStatus.OK);
     }
+
+    @DeleteMapping("/alias/{alias}")
+    public ResponseEntity<Void> deleteCertificateByAlias(@PathVariable String alias) {
+        certificateService.deleteCertificateByAlias(alias);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

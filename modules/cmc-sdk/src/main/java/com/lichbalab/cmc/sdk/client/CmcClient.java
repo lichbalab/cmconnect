@@ -11,4 +11,6 @@ public interface CmcClient {
     List<Certificate> getCertificates();
 
     Certificate addCertificate(Certificate certificate);
+
+    void deleteCertificate(String alias);
 }

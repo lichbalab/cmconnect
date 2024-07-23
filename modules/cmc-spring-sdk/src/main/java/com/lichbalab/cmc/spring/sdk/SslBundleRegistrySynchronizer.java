@@ -1,8 +1,5 @@
 package com.lichbalab.cmc.spring.sdk;
 
-import com.lichbalab.cmc.sdk.CmcClientConfig;
-import com.lichbalab.cmc.sdk.client.CmcClient;
-import com.lichbalab.cmc.sdk.client.CmcClientFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ssl.SslBundle;
 import org.springframework.boot.ssl.SslBundleKey;
@@ -32,4 +29,9 @@ public class SslBundleRegistrySynchronizer {
         sslBundleRegistry.updateDefaultBundle(sslBundle);
     }
 
+    public void synchronize(String alias) {
+        CmcSslBundleRegistry sslBundleRegistry = CmcSslBundleRegistryProvider.getRegistry();
+        SslBundle sslBundle = sslBundleProvider.getBundle(SslBundleKey.of(null, alias));
+        sslBundleRegistry.updateDefaultBundle(sslBundle);
+    }
 }

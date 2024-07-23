@@ -84,4 +84,14 @@ public class CertificateServiceIntegrationTest {
         Assertions.assertNull(retrieved, "Certificate has not been deleted.");
     }
 
+    @Test
+    void testDeleteCertificateByAlias() {
+        CertificateDto created = certificateService.createCertificate(CERTS.getFirst());
+        certificateService.deleteCertificateByAlias(created.getAlias());
+
+        CertificateDto retrieved = certificateService.getCertificateById(created.getId());
+        Assertions.assertNull(retrieved, "Certificate has not been deleted.");
+    }
+
+
 }

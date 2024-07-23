@@ -31,7 +31,7 @@ class CmcClientImpl implements CmcClient {
         if (certDtoList == null || certDtoList.isEmpty()) {
             return null;
         }
-        return CertificateUtils.buildFromDto(certDtoList.get(0));
+        return CertificateUtils.buildFromDto(certDtoList.getFirst());
     }
 
     @Override
@@ -70,7 +70,16 @@ class CmcClientImpl implements CmcClient {
         return CertificateUtils.buildFromDto(responseDto);
     }
 
+    @Override
+    public void deleteCertificate(String alias) {
+        Mono<Void> responseMono = webClient.delete()
+                .uri("/certificates/alias/{alias}", alias)
+                .retrieve()
+                .bodyToMono(Void.class);
+        responseMono = handleErrors(responseMono);
 
+        responseMono.block();
+    }
 
     private <T> Mono<T> handleErrors(Mono<T> mono) {
         return mono.onErrorMap(WebClientRequestException.class, ex -> new CmcClientException("Error calling cmc-rest-api", ex))

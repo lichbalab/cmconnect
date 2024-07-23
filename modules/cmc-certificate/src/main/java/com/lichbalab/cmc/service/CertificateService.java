@@ -49,4 +49,11 @@ public class CertificateService {
     public CertificateDto getCertByAlias(String alias) {
         return mapper.domToDto(certificateRepository.getCertByAlias(alias));
     }
+
+    public void deleteCertificateByAlias(String alias) {
+        Certificate cert = certificateRepository.getCertByAlias(alias);
+        if (cert != null) {
+            certificateRepository.delete(cert);
+        }
+    }
 }
