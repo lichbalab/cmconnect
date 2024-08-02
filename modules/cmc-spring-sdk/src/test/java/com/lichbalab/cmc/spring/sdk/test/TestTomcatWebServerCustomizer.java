@@ -4,6 +4,7 @@ import com.lichbalab.certificate.Certificate;
 import com.lichbalab.certificate.CertificateTestHelper;
 import com.lichbalab.cmc.sdk.client.CmcClient;
 import com.lichbalab.cmc.spring.sdk.CmcDefaultSslBundleRegistry;
+import com.lichbalab.cmc.spring.sdk.CmcSslBundleRegistry;
 import com.lichbalab.cmc.spring.sdk.CmcSslBundleRegistryInitializer;
 import com.lichbalab.cmc.spring.sdk.CmcSslBundleRegistryProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class TestTomcatWebServerCustomizer implements WebServerFactoryCustomizer
 
     public TomcatServletWebServerFactory factory;
 
+    public static Ssl.ClientAuth clientAuth = Ssl.ClientAuth.NEED;
+
     @Autowired
     private CmcClient cmcClient;
 
@@ -30,12 +33,25 @@ public class TestTomcatWebServerCustomizer implements WebServerFactoryCustomizer
 
     @Override
     public void customize(TomcatServletWebServerFactory factory) {
-        CERTS.stream()
-                .filter(cert -> List.of(CertConfig.ALIAS_1, CertConfig.ALIAS_2).contains(cert.getAlias()))
-                .forEach(cert -> cmcClient.addCertificate(cert));
-        sslBundleRegistryInitializer.init(SslBundleKey.of(null, CertConfig.ALIAS_2));
+
+        try {
+            CmcSslBundleRegistryProvider.getRegistry().getDefaultBundle();
+        } catch (Exception e) {
+            CERTS.stream()
+                    .filter(cert -> List.of(CertConfig.ALIAS_1, CertConfig.ALIAS_2).contains(cert.getAlias()))
+                    .forEach(cert -> cmcClient.addCertificate(cert));
+
+            sslBundleRegistryInitializer.init(SslBundleKey.of(null, CertConfig.ALIAS_2));
+            // Do nothing
+        }
         factory.setSslBundles(CmcSslBundleRegistryProvider.getSslBundles());
-        factory.setSsl(Ssl.forBundle(CmcDefaultSslBundleRegistry.SSL_BUNDLE_NAME));
+        // Set the port to 0 to avoid port conflicts\
+        // Webserver will choose a random port
+        factory.setSslBundles(CmcSslBundleRegistryProvider.getSslBundles());
+        factory.setPort(0);
+        Ssl ssl = Ssl.forBundle(CmcDefaultSslBundleRegistry.SSL_BUNDLE_NAME);
+        ssl.setClientAuth(clientAuth);
+        factory.setSsl(ssl);
         this.factory = factory;
     }
 }
