@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CmcClientConfigProvider {
 
-    private final CmcClientProperties properties;
+    private final CmcSdkProperties properties;
 
-    public CmcClientConfigProvider(CmcClientProperties properties) {
+    public CmcClientConfigProvider(CmcSdkProperties properties) {
         this.properties = properties;
     }
 

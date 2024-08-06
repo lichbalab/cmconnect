@@ -2,8 +2,13 @@ package com.lichbalab.cmc.spring.sdk.test;
 
 import com.lichbalab.certificate.Certificate;
 import com.lichbalab.certificate.CertificateTestHelper;
+import com.lichbalab.cmc.sdk.CmcClientConfig;
 import com.lichbalab.cmc.sdk.client.CmcClient;
+import com.lichbalab.cmc.sdk.client.CmcClientFactory;
+import com.lichbalab.cmc.spring.sdk.CmcDefaultSslBundleRegistry;
+import com.lichbalab.cmc.spring.sdk.CmcSslBundleRegistryProvider;
 import com.lichbalab.cmc.spring.sdk.SslBundleRegistrySynchronizer;
+import io.netty.handler.ssl.ClientAuth;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
@@ -81,6 +86,14 @@ public class CmcSpringSdkTomcatServerIT {
                 .withEnv("DB_USERNAME", POSTGRES_CONTAINER.getUsername())
                 .withEnv("DB_PASSWORD", POSTGRES_CONTAINER.getPassword());
         CMC_API.start();
+
+        CmcClientConfig config = new CmcClientConfig();
+        config.setBaseUrl("http://localhost:" + CMC_API.getMappedPort(API_EXPOSED_PORT));
+        CmcClient cmcClient = CmcClientFactory.createService(config);
+        CERTS.stream()
+                .filter(cert -> List.of(CertConfig.ALIAS_1, CertConfig.ALIAS_2).contains(cert.getAlias()))
+                .forEach(cmcClient::addCertificate);
+
     }
 
     @AfterAll
@@ -89,8 +102,11 @@ public class CmcSpringSdkTomcatServerIT {
         POSTGRES_CONTAINER.stop();
     }
 
-    public void before() {
-        SpringContextUtil.startContext("--cmc.client.baseUrl=http://localhost:" + CMC_API.getMappedPort(API_EXPOSED_PORT));
+    public void before(String clientAuth) {
+        SpringContextUtil.startContext(
+                "--TEST_CMC_API_PORT=" + CMC_API.getMappedPort(API_EXPOSED_PORT),
+                "--TEST_CMC_CLIENT_AUTH=" + clientAuth
+        );
         cmcClient = SpringContextUtil.getContext().getBean(CmcClient.class);
         sslBundleRegistrySynchronizer = SpringContextUtil.getContext().getBean(SslBundleRegistrySynchronizer.class);
     }
@@ -98,12 +114,12 @@ public class CmcSpringSdkTomcatServerIT {
     @AfterEach
     public void after() {
         SpringContextUtil.stopContext();
+        CmcSslBundleRegistryProvider.getRegistry().clear();
     }
 
     @Test
     public void test1WaySslListenerWitRestTemplate() {
-        TestTomcatWebServerCustomizer.clientAuth = null;
-        before();
+        before(Ssl.ClientAuth.NONE.name());
         SslBundle sslBundle = createSslBundles(
                 CertConfig.PRIVATE_KEY_ALAIS_3,
                 CertConfig.CERT_ALAIS_3,
@@ -139,8 +155,7 @@ public class CmcSpringSdkTomcatServerIT {
 
     @Test
     void test2WaySslListenerWitRestTemplate() {
-        TestTomcatWebServerCustomizer.clientAuth = Ssl.ClientAuth.NEED;
-        before();
+        before(Ssl.ClientAuth.NEED.name());
         // clean up all certificates
         CERTS.forEach(cert -> cmcClient.deleteCertificate(cert.getAlias()));
         SslBundle sslBundle = createSslBundles(

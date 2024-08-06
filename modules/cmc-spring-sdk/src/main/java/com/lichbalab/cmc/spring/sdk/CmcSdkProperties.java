@@ -6,10 +6,12 @@ import org.springframework.context.annotation.Configuration;
 import java.util.function.Supplier;
 
 @Configuration
-@ConfigurationProperties(prefix = "cmc.client")
-public class CmcClientProperties {
+@ConfigurationProperties(prefix = "cmc.sdk")
+public class CmcSdkProperties {
     private String apiKey;
     private String baseUrl;
+    private String sslBundleKeyAlias;
+    private String clientAuth;
     private Supplier<String> baseUrlSupplier;
 
     // Getters and setters
@@ -26,4 +28,14 @@ public class CmcClientProperties {
     public void setBaseUrlSupplier(Supplier<String> baseUrlSupplier) {
         this.baseUrlSupplier = baseUrlSupplier;
     }
+
+    public String getSslBundleKeyAlias() { return sslBundleKeyAlias; }
+
+    public void setSslBundleKeyAlias(String sslBundleKeyAlias) {
+        this.sslBundleKeyAlias = sslBundleKeyAlias;
+    }
+
+    public String getClientAuth() { return clientAuth; }
+
+    public void setClientAuth(String clientAuth) { this.clientAuth = clientAuth; }
 }

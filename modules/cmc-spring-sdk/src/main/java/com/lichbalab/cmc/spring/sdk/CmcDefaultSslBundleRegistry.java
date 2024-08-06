@@ -117,4 +117,8 @@ public class CmcDefaultSslBundleRegistry implements CmcSslBundleRegistry, SslBun
     public void removeSslBundle(String key) {
         registeredBundles.remove(key);
     }
+
+    public void clear() {
+        registeredBundles.clear();
+    }
 }

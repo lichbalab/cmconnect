@@ -12,4 +12,6 @@ public interface CmcSslBundleRegistry extends SslBundleRegistry {
     void updateDefaultBundle(SslBundle bundle);
 
     void removeSslBundle(String key);
+
+    void clear();
 }

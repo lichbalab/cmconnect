@@ -3,7 +3,7 @@ package com.lichbalab.cmc.spring.sdk.test;
 import com.lichbalab.certificate.Certificate;
 import com.lichbalab.certificate.CertificateTestHelper;
 import com.lichbalab.cmc.sdk.client.CmcClient;
-import com.lichbalab.cmc.spring.sdk.CmcClientProperties;
+import com.lichbalab.cmc.spring.sdk.CmcSdkProperties;
 import com.lichbalab.cmc.spring.sdk.SslBundleRegistrySynchronizer;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.ssl.DefaultSslBundleRegistry;
 import org.springframework.boot.ssl.SslBundle;
 import org.springframework.boot.ssl.SslBundles;
@@ -53,7 +52,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Testcontainers
 @SpringBootTest(classes = TestApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-//@ExtendWith(WebServerExtension.class)
 public class CmcSpringSdkTomcatClientIT {
 
     private ConfigurableApplicationContext applicationContext;
@@ -64,7 +62,6 @@ public class CmcSpringSdkTomcatClientIT {
 
     private static PostgreSQLContainer<?> POSTGRES_CONTAINER;
     private static GenericContainer<?> CMC_API;
-    private static int HTTPS_PORT = 8671;
 
     @Autowired
     private CmcClient cmcClient;
@@ -76,7 +73,7 @@ public class CmcSpringSdkTomcatClientIT {
     private TestTomcatWebServerCustomizer customizer;
 
     @Autowired
-    private CmcClientProperties cmcClientProperties;
+    private CmcSdkProperties cmcClientProperties;
 
     private final static List<Certificate> CERTS = CertificateTestHelper.CERTS;
     private final static int API_EXPOSED_PORT = 8080;
@@ -180,43 +177,14 @@ public class CmcSpringSdkTomcatClientIT {
                 .filter(cert -> List.of(CertConfig.ALIAS_1, CertConfig.ALIAS_2).contains((cert.getAlias())))
                 .forEach(cert -> cmcClient.addCertificate(cert));
 
-        //customizer.factory.;
-        //context.getWebServer().stop();
-        //context.getWebServer().destroy();
-
-        //context.getWebServer().start();
-        //customizer.factory.getWebServer().destroy();
-
-        //webServer.stop();
-
-        //serverApplicationContext.getWebServer().destroy();
-        //startWebServer();
-
-
-
-        //customizer.factory.getSsl().setClientAuth(Ssl.ClientAuth.NEED);
-        //customizer.clientAuth = Ssl.ClientAuth.NEED;
-        //webServer.start();
-        //context.getWebServer().start();
-        //sslBundleRegistrySynchronizer.synchronize(CertConfig.ALIAS_2);
-
-
-        //serverApplicationContext.getWebServer().start();
-        //webServer = customizer.factory.getWebServer();
-        //webServer.start();
-
         callApiAndCechHandshakeException(restTemplate);
 
-        //stopWebServer();
         CERTS.stream()
                 .filter(cert -> CertConfig.CERT_ALAIS_3.equals(cert.getAlias()))
                 .forEach(cert -> cmcClient.addCertificate(cert));
 
         // Update SSL context for the REST API endpoint with server certificate with alias "lichbalab3.pem"
         sslBundleRegistrySynchronizer.synchronize(CertConfig.ALIAS_2);
-
-        //startWebServer();
-        //SpringContextUtil.startContext();
 
         callApiAndCheckResponse(restTemplate);
 
@@ -335,40 +303,5 @@ public class CmcSpringSdkTomcatClientIT {
         PemSslStoreDetails trustStoreDetails = PemSslStoreDetails.forCertificate(trustCert);
         SslStoreBundle stores = new PemSslStoreBundle(keyStoreDetails, trustStoreDetails);
         return SslBundle.of(stores);
-    }
-
-
-    private void startWebServer() {
-        applicationContext = SpringApplication.run(TestApplication.class);
-        DynamicPropertyRegistry registry = applicationContext.getBean(DynamicPropertyRegistry.class);
-        registry.add("cmc.client.baseUrl", () -> "http://localhost:" + CMC_API.getMappedPort(API_EXPOSED_PORT));
-        tomcatFactory = new TomcatServletWebServerFactory();
-        new TestTomcatWebServerCustomizer().customize(tomcatFactory);
-        tomcatFactory.setPort(0); // Set port to 0 to use a random port
-
-        // Start the server
-        webServer = tomcatFactory.getWebServer();
-        webServer.start();
-
-        // Retrieve the assigned port
-        HTTPS_PORT = webServer.getPort();
-
-        cmcClient = applicationContext.getBean(CmcClient.class);
-        sslBundleRegistrySynchronizer = applicationContext.getBean(SslBundleRegistrySynchronizer.class);
-
-        // Set up RestTemplate and base URL
-        //restTemplate = new RestTemplate();
-        //baseUrl = "http://localhost:" + HTTPS_PORT + "/api";
-    }
-
-    private void stopWebServer() {
-
-        // Stop the server
-        if (webServer != null) {
-            webServer.stop();
-        }
-        webServer = null;
-        tomcatFactory = null;
-        // Stop the server
     }
 }
