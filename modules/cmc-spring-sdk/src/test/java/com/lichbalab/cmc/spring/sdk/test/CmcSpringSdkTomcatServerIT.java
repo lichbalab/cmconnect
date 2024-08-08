@@ -1,49 +1,25 @@
 package com.lichbalab.cmc.spring.sdk.test;
 
-import com.lichbalab.cmc.sdk.CmcClientConfig;
 import com.lichbalab.cmc.sdk.client.CmcClient;
-import com.lichbalab.cmc.sdk.client.CmcClientFactory;
 import com.lichbalab.cmc.spring.sdk.CmcSslBundleRegistryProvider;
 import com.lichbalab.cmc.spring.sdk.SslBundleRegistrySynchronizer;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.ssl.SslBundle;
 import org.springframework.boot.web.context.WebServerApplicationContext;
 import org.springframework.boot.web.server.Ssl;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class CmcSpringSdkTomcatServerIT extends BaseIntegrationTest {
-
-    private CmcClient cmcClient;
-    private SslBundleRegistrySynchronizer sslBundleRegistrySynchronizer;
-
-/*
-    @BeforeAll
-    public static void beforeAll() {
-        BaseIntegrationTest.beforeAll();
-        CmcClientConfig config = new CmcClientConfig();
-        config.setBaseUrl("http://localhost:" + CMC_API.getMappedPort(API_EXPOSED_PORT));
-        CmcClient cmcClient = CmcClientFactory.createService(config);
-        CERTS.stream()
-                .filter(cert -> List.of(CertConfig.ALIAS_1, CertConfig.ALIAS_2).contains(cert.getAlias()))
-                .forEach(cmcClient::addCertificate);
-
-    }
-*/
-
 
     public void before(String clientAuth, String keyAlias) {
         before(
                 "--TEST_CMC_API_PORT=" + CMC_API.getMappedPort(API_EXPOSED_PORT),
                 "--TEST_CMC_CLIENT_AUTH=" + clientAuth,
-                "--TEST_KEY_ALIAS=" + keyAlias
+                "--TEST_KEY_ALIAS=" + keyAlias,
+                "--TEST_CMC_CRON=0 0 0 * * *"
         );
     }
 
@@ -137,5 +113,4 @@ public class CmcSpringSdkTomcatServerIT extends BaseIntegrationTest {
         return new RestTemplate(requestFactory);
     }
 */
-
 }

@@ -13,6 +13,7 @@ public class CmcSdkProperties {
     private String sslBundleKeyAlias;
     private String clientAuth;
     private String synchronisationSchedulingCron;
+    private String disableHostnameVerification;
     private Supplier<String> baseUrlSupplier;
 
     // Getters and setters
@@ -45,4 +46,11 @@ public class CmcSdkProperties {
     public void setSynchronisationSchedulingCron(String synchronisationSchedulingCron) {
         this.synchronisationSchedulingCron = synchronisationSchedulingCron;
     }
+
+    public String getDisableHostnameVerification() { return disableHostnameVerification; }
+
+    public void setDisableHostnameVerification(String disableHostnameVerification) {
+        this.disableHostnameVerification = disableHostnameVerification;
+    }
+
 }

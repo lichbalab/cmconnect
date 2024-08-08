@@ -107,7 +107,6 @@ public class CmcDefaultSslBundleRegistry implements CmcSslBundleRegistry, SslBun
 
         void addUpdateHandler(Consumer<SslBundle> updateHandler) {
             Assert.notNull(updateHandler, "UpdateHandler must not be null");
-            this.updateHandlers.clear();
             this.updateHandlers.add(updateHandler);
         }
 
