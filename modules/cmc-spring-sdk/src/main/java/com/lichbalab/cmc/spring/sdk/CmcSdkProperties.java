@@ -12,6 +12,7 @@ public class CmcSdkProperties {
     private String baseUrl;
     private String sslBundleKeyAlias;
     private String clientAuth;
+    private String synchronisationSchedulingCron;
     private Supplier<String> baseUrlSupplier;
 
     // Getters and setters
@@ -38,4 +39,10 @@ public class CmcSdkProperties {
     public String getClientAuth() { return clientAuth; }
 
     public void setClientAuth(String clientAuth) { this.clientAuth = clientAuth; }
+
+    public String getSynchronisationSchedulingCron() { return synchronisationSchedulingCron; }
+
+    public void setSynchronisationSchedulingCron(String synchronisationSchedulingCron) {
+        this.synchronisationSchedulingCron = synchronisationSchedulingCron;
+    }
 }
