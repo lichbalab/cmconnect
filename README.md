@@ -1,8 +1,8 @@
 
-# KeyStoreConnect
+# Certificate Manager Connect (CMC)
 
 ## Introduction
-Welcome to KeyStoreConnect! This project provides a robust solution for managing and accessing certificates. It's designed to simplify security management for applications, offering easy integration and high security standards.
+This project provides a robust solution for managing and accessing certificates by application requred them for SSL connections, encryption, authentication. It's designed to offer easy integration and high security standards.
 
 ## Requirements
 - Java JDK 21 or higher
