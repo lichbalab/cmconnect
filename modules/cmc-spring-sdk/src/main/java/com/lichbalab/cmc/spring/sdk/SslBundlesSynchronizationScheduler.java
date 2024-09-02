@@ -6,29 +6,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.support.CronTrigger;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ScheduledFuture;
 
-@Component
 public class SslBundlesSynchronizationScheduler {
 
     private static final Logger log = LoggerFactory.getLogger(SslBundlesSynchronizationScheduler.class);
 
     private final SslBundleRegistrySynchronizer sslBundleRegistrySynchronizer;
     private final CmcSdkProperties cmcSdkProperties;
+    private final TaskScheduler taskScheduler;
 
     @Autowired
-    public SslBundlesSynchronizationScheduler(SslBundleRegistrySynchronizer sslBundleRegistrySynchronizer, CmcSdkProperties cmcSdkProperties) {
+    public SslBundlesSynchronizationScheduler(SslBundleRegistrySynchronizer sslBundleRegistrySynchronizer,
+                                              CmcSdkProperties cmcSdkProperties, TaskScheduler taskScheduler) {
         this.sslBundleRegistrySynchronizer = sslBundleRegistrySynchronizer;
         this.cmcSdkProperties = cmcSdkProperties;
+        this.taskScheduler = taskScheduler;
         log.info("SSL Bundles Synchronization Scheduler started.");
     }
-
-    @Autowired
-    private TaskScheduler taskScheduler;
 
     private ScheduledFuture<?> futureTask;
 

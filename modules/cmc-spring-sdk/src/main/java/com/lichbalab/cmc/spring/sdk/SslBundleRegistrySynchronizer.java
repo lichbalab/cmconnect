@@ -2,14 +2,9 @@ package com.lichbalab.cmc.spring.sdk;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ssl.SslBundle;
 import org.springframework.boot.ssl.SslBundleKey;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.stereotype.Service;
 
-@Service
-@DependsOn("cmcSslBundleRegistryInitializer")
 public class SslBundleRegistrySynchronizer {
 
     private static final Logger log = LoggerFactory.getLogger(SslBundleRegistrySynchronizer.class);
@@ -17,7 +12,6 @@ public class SslBundleRegistrySynchronizer {
     private final SslBundleProvider sslBundleProvider;
     private final CmcSdkProperties properties;
 
-    @Autowired
     public SslBundleRegistrySynchronizer(SslBundleProvider sslBundleProvider, CmcSdkProperties properties) {
         this.sslBundleProvider = sslBundleProvider;
         this.properties = properties;

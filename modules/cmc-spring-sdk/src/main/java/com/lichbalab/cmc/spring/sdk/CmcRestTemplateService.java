@@ -9,11 +9,9 @@ import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
 import org.springframework.boot.ssl.SslBundle;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Service
-public class CmcRestTemplateService {
+public class CmcRestTemplateService implements CmcRestTemplate {
 
     private final CmcSslBundleRegistry registry;
     private final CmcSdkProperties properties;
