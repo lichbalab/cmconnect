@@ -176,4 +176,4 @@ We welcome contributions! Please see our contribution guidelines for how to subm
 KeyStoreConnect is released under the [[TBD]] license. See the LICENSE file for more details.
 
 ## Contact
-For support or questions, reach out to us at [TBD].
+For support or questions, reach out to us at lichbalab@gmail.com.
