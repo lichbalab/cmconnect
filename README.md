@@ -109,8 +109,10 @@ Applicable only for HTTPS client connections.
 ## Building from Source
 
 ### Clone the Repository
+```bash
 git clone https://github.com/lichbalab/cmconnect.git
 cd cmconnect
+```
 
 ### Build the Project
 To build the project, use Maven:
