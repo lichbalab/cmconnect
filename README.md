@@ -2,7 +2,7 @@
 # Certificate Manager Connect (CMC)
 
 ## Introduction
-This project provides a robust solution for managing and accessing certificates by application requred them for SSL connections, encryption, authentication. It's designed to offer easy integration and high security standards.
+This project provides a robust solution for managing and accessing certificates by application required them for SSL connections, encryption, authentication. It's designed to offer easy integration and high security standards.
 
 ## Requirements
 - Java JDK 21 or higher

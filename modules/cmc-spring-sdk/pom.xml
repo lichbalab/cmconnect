@@ -29,12 +29,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.lichbalab.cmc</groupId>
-            <artifactId>cmc-certificate-connect</artifactId>
-            <version>2024.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-resolver-dns-native-macos</artifactId>
             <version>4.1.101.Final</version> <!-- Specify the appropriate version -->
@@ -136,7 +130,5 @@
             </plugin>
         </plugins>
     </build>
-
-
 
 </project>
