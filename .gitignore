@@ -45,3 +45,4 @@ replay_pid*
 /modules/cmc-shared/cmc-shared.iml
 /modules/cmc-sdk/target/
 /modules/cmc-sdk/cmc-sdk.iml
+.aider*

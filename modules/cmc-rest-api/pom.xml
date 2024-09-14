@@ -26,12 +26,6 @@
 
 		<dependency>
 			<groupId>com.lichbalab.cmc</groupId>
-			<artifactId>cmc-document</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.lichbalab.cmc</groupId>
 			<artifactId>cmc-ui</artifactId>
 			<version>${project.version}</version>
 		</dependency>
