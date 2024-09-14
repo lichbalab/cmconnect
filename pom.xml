@@ -43,7 +43,6 @@
         <module>modules/cmc-rest-api</module>
         <module>modules/cmc-certificate-connect</module>
         <module>modules/cmc-certificate</module>
-        <module>modules/cmc-ui</module>
         <module>modules/cmc-shared</module>
         <module>modules/cmc-sdk</module>
         <module>modules/cmc-spring-sdk</module>
