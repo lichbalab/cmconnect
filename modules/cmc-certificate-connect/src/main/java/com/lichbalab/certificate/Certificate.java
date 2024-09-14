@@ -18,9 +18,6 @@ public class Certificate {
     private Date                        expirationDate;
     private String serialNumber;
     private String alias;
-    
-    // Add a static Set to keep track of used aliases
-    private static final Set<String> usedAliases = new HashSet<>();
     private String privateKeyPassword;
     private PrivateKey privateKey;
 
@@ -81,14 +78,7 @@ public class Certificate {
     }
 
     public void setAlias(String alias) {
-        if (usedAliases.contains(alias)) {
-            throw new IllegalArgumentException("Alias must be unique. The alias '" + alias + "' is already in use.");
-        }
-        if (this.alias != null) {
-            usedAliases.remove(this.alias);
-        }
         this.alias = alias;
-        usedAliases.add(alias);
     }
 
     public String getAlias() {
