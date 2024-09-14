@@ -13,6 +13,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"alias"})})
 public class Certificate {
 
 
@@ -22,7 +23,7 @@ public class Certificate {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "alias")
+    @Column(name = "alias", unique = true)
     private String     alias;
     @Column(name = "serial_number")
     private String serialNumber;
