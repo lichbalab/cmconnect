@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"alias"}))
 public class Certificate {
 
 

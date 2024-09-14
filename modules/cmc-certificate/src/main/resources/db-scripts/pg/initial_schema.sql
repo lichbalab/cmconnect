@@ -9,7 +9,7 @@ CREATE SEQUENCE certificate_seq
 
 CREATE TABLE certificate (
     id BIGINT NOT NULL,
-    alias VARCHAR(255),
+    alias VARCHAR(255) UNIQUE,
     serial_number VARCHAR(255),
     expiration_date TIMESTAMP WITH TIME ZONE,
     subject VARCHAR(255),
