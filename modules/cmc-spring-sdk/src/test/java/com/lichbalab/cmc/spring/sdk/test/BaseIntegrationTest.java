@@ -98,6 +98,8 @@ public abstract class BaseIntegrationTest {
     public static void afterAll() {
         CMC_API.stop();
         POSTGRES_CONTAINER.stop();
+        SpringContextUtil.stopContext();
+        CmcSslBundleRegistryProvider.getRegistry().clear();
     }
 
     @AfterEach

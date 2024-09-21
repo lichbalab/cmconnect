@@ -46,3 +46,4 @@ replay_pid*
 /modules/cmc-sdk/target/
 /modules/cmc-sdk/cmc-sdk.iml
 .aider*
+/modules/cmc-spring-sdk/cmc-spring-sdk.iml

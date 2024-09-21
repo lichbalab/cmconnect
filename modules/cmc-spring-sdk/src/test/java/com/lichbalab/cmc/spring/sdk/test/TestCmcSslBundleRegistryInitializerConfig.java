@@ -1,24 +1,20 @@
 package com.lichbalab.cmc.spring.sdk.test;
 
-import com.lichbalab.cmc.spring.sdk.CmcDefaultSslBundleRegistry;
 import com.lichbalab.cmc.spring.sdk.CmcSdkProperties;
-import com.lichbalab.cmc.spring.sdk.CmcSslBundleRegistryInitializer;
 import com.lichbalab.cmc.spring.sdk.CmcTomcatWebServerCustomizer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ssl.SslBundles;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.Ssl;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Primary;
 
 @TestConfiguration
 public class TestCmcSslBundleRegistryInitializerConfig {
 
-    @Autowired
-    private CmcSslBundleRegistryInitializer initializer;
-
     @Bean
+    @DependsOn("cmcSslBundleRegistryInitializer")
     @Primary
     public CmcTomcatWebServerCustomizer cmcTomcatWebServerCustomizer(CmcSdkProperties properties) {
         return new CmcTomcatWebServerCustomizer(properties) {
@@ -28,7 +24,7 @@ public class TestCmcSslBundleRegistryInitializerConfig {
                         CertConfig.PRIVATE_KEY_ALAIS_3,
                         CertConfig.CERT_ALAIS_3,
                         CertConfig.CERT_ALAIS_2
-                );//.getBundle(CertConfig.TEST_SSL_BUNDLE_NAME);
+                );
                 factory.setSslBundles(sslBundles);
                 Ssl ssl = Ssl.forBundle(CertConfig.TEST_SSL_BUNDLE_NAME);
                 ssl.setClientAuth(clientAuth);
