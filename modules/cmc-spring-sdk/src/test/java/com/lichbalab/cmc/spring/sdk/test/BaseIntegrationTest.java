@@ -17,7 +17,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ssl.DefaultSslBundleRegistry;
 import org.springframework.boot.ssl.SslBundle;
 import org.springframework.boot.ssl.SslBundles;
@@ -53,10 +52,8 @@ public abstract class BaseIntegrationTest {
     protected static PostgreSQLContainer<?> POSTGRES_CONTAINER;
     protected static GenericContainer<?> CMC_API;
 
-    @Autowired
     protected CmcClient cmcClient;
 
-    @Autowired
     protected SslBundleRegistrySynchronizer sslBundleRegistrySynchronizer;
 
     protected static final List<Certificate> CERTS = CertificateTestHelper.CERTS;
