@@ -105,6 +105,17 @@ Applicable only for HTTPS client connections.
   ```properties
   cmc.sdk.disable-hostname-verification=true
 
+##### `cmc.sdk.enabled`
+
+- **Default**: `true`
+- **Description**:
+  Whether to enable CMC SDK.
+
+  Example:
+  ```properties
+  cmc.sdk.enabled=false
+
+
 
 ## Building from Source
 
