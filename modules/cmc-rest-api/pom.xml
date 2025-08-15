@@ -115,10 +115,11 @@
 			</plugin>
 
 			<!-- Maven Resources Plugin -->
+<!--
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.2.0</version> <!-- Use the latest version -->
+				<version>3.2.0</version> &lt;!&ndash; Use the latest version &ndash;&gt;
 				<executions>
 					<execution>
 						<phase>prepare-package</phase>
@@ -136,6 +137,7 @@
 					</execution>
 				</executions>
 			</plugin>
+-->
 
 		</plugins>
 	</build>
